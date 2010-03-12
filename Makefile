@@ -8,7 +8,7 @@ ifndef SAGA_LOCATION
  $(error "SAGA_LOCATION must be set for this Makefile to work!")
 endif
 
-SAGA_SUBDIRS   = glite_cream_job 
+SAGA_SUBDIRS   = cream_job 
 
 #install::
 #	echo XX
