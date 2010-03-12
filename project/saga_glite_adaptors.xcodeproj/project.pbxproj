@@ -1,0 +1,790 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		7B6DA6890B9A2DA100168752 /* All Adaptors */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 7B6DA69F0B9A2DC300168752 /* Build configuration list for PBXAggregateTarget "All Adaptors" */;
+			buildPhases = (
+			);
+			dependencies = (
+				7B9FBA090BB1D18600E9EA8D /* PBXTargetDependency */,
+			);
+			name = "All Adaptors";
+			productName = ALL;
+		};
+		7BF7D4F2110F7A2B00A37260 /* All Tests */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 7BF7D504110F7ADE00A37260 /* Build configuration list for PBXAggregateTarget "All Tests" */;
+			buildPhases = (
+			);
+			dependencies = (
+			);
+			name = "All Tests";
+			productName = "All Tests";
+		};
+		7BF7D4F7110F7A5600A37260 /* Everything */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 7BF7D505110F7ADE00A37260 /* Build configuration list for PBXAggregateTarget "Everything" */;
+			buildPhases = (
+			);
+			dependencies = (
+				7BF7D4FD110F7A5C00A37260 /* PBXTargetDependency */,
+				7BF7D4FB110F7A5C00A37260 /* PBXTargetDependency */,
+			);
+			name = Everything;
+			productName = Everything;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		7BF3D42C1113638A00E5BBAE /* libsaga_engine.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF3D4011113622100E5BBAE /* libsaga_engine.dylib */; };
+		7BF3D42D1113638A00E5BBAE /* libsaga_package_job.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF3D40B1113622100E5BBAE /* libsaga_package_job.dylib */; };
+		7BF3D500111366FE00E5BBAE /* glite_cream_job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BF3D4EE111366FE00E5BBAE /* glite_cream_job.cpp */; };
+		7BF3D501111366FE00E5BBAE /* glite_cream_job.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7BF3D4EF111366FE00E5BBAE /* glite_cream_job.hpp */; };
+		7BF3D502111366FE00E5BBAE /* glite_cream_job_adaptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BF3D4F0111366FE00E5BBAE /* glite_cream_job_adaptor.cpp */; };
+		7BF3D503111366FE00E5BBAE /* glite_cream_job_adaptor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7BF3D4F1111366FE00E5BBAE /* glite_cream_job_adaptor.hpp */; };
+		7BF3D504111366FE00E5BBAE /* glite_cream_job_async.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BF3D4F3111366FE00E5BBAE /* glite_cream_job_async.cpp */; };
+		7BF3D505111366FE00E5BBAE /* glite_cream_job_istream.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7BF3D4F4111366FE00E5BBAE /* glite_cream_job_istream.hpp */; };
+		7BF3D506111366FE00E5BBAE /* glite_cream_job_ostream.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7BF3D4F5111366FE00E5BBAE /* glite_cream_job_ostream.hpp */; };
+		7BF3D507111366FE00E5BBAE /* glite_cream_job_proxy_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BF3D4F6111366FE00E5BBAE /* glite_cream_job_proxy_wrapper.cpp */; };
+		7BF3D508111366FE00E5BBAE /* glite_cream_job_proxy_wrapper.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7BF3D4F7111366FE00E5BBAE /* glite_cream_job_proxy_wrapper.hpp */; };
+		7BF3D509111366FE00E5BBAE /* glite_cream_job_service.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BF3D4F8111366FE00E5BBAE /* glite_cream_job_service.cpp */; };
+		7BF3D50A111366FE00E5BBAE /* glite_cream_job_service.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7BF3D4F9111366FE00E5BBAE /* glite_cream_job_service.hpp */; };
+		7BF3D50B111366FE00E5BBAE /* glite_cream_job_service_async.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BF3D4FA111366FE00E5BBAE /* glite_cream_job_service_async.cpp */; };
+		7BF3D50C111366FE00E5BBAE /* glite_cream_job_stream.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7BF3D4FB111366FE00E5BBAE /* glite_cream_job_stream.hpp */; };
+		7BF3D50D111366FE00E5BBAE /* glite_cream_job_utils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7BF3D4FC111366FE00E5BBAE /* glite_cream_job_utils.hpp */; };
+		7BF3D50E111366FE00E5BBAE /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 7BF3D4FD111366FE00E5BBAE /* Makefile */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7B9FBA080BB1D18600E9EA8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BF50DFA0B9A9AF90073E20C;
+			remoteInfo = globus_gram_job_adaptor;
+		};
+		7BF3D4001113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFDDC0B9973DF00F9AF14;
+			remoteInfo = saga_engine;
+		};
+		7BF3D4021113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFE1F0B99759300F9AF14;
+			remoteInfo = saga_package_namespace;
+		};
+		7BF3D4041113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFDDD0B9973DF00F9AF14;
+			remoteInfo = saga_package_file;
+		};
+		7BF3D4061113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFE590B99771C00F9AF14;
+			remoteInfo = saga_package_advert;
+		};
+		7BF3D4081113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B6DA62A0B9A206900168752;
+			remoteInfo = saga_package_replica;
+		};
+		7BF3D40A1113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B5AFE820B9977EA00F9AF14;
+			remoteInfo = saga_package_job;
+		};
+		7BF3D40C1113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B6DA6590B9A29A100168752;
+			remoteInfo = saga_package_rpc;
+		};
+		7BF3D40E1113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B6DA67C0B9A2C8900168752;
+			remoteInfo = saga_package_stream;
+		};
+		7BF3D4101113622100E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B9BEA040D5A5000000DF7CB;
+			remoteInfo = saga_package_sd;
+		};
+		7BF3D440111363EC00E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B5552270B97C34000616724;
+			remoteInfo = saga_engine;
+		};
+		7BF3D442111363EC00E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B5AFE6A0B9977EA00F9AF14;
+			remoteInfo = saga_package_job;
+		};
+		7BF3D47F1113648200E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7BF3D4741113648200E5BBAE /* saga_x509_adaptor.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7BEE45770C39BDEA003D8E05;
+			remoteInfo = libsaga_adaptor_globus_gram_job;
+		};
+		7BF3D4CD111365FF00E5BBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7BF3D4741113648200E5BBAE /* saga_x509_adaptor.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BF50DFA0B9A9AF90073E20C;
+			remoteInfo = libsaga_adaptor_x509_context;
+		};
+		7BF7D4FA110F7A5C00A37260 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BF7D4F2110F7A2B00A37260;
+			remoteInfo = "All Tests";
+		};
+		7BF7D4FC110F7A5C00A37260 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B6DA6890B9A2DA100168752;
+			remoteInfo = "All Adaptors";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7B7AB6670BB31916003C4CBE /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(BUILD_DIR)/$(CONFIGURATION)/share/saga/";
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = saga_engine.leopard.xcodeproj; path = ../../../project/XCode/saga_engine.leopard.xcodeproj; sourceTree = SOURCE_ROOT; };
+		7BEE45770C39BDEA003D8E05 /* libsaga_adaptor_globus_gram_job.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libsaga_adaptor_globus_gram_job.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		7BF3D4741113648200E5BBAE /* saga_x509_adaptor.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = saga_x509_adaptor.xcodeproj; path = ../../x509/project/saga_x509_adaptor.xcodeproj; sourceTree = SOURCE_ROOT; };
+		7BF3D4EE111366FE00E5BBAE /* glite_cream_job.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glite_cream_job.cpp; sourceTree = "<group>"; };
+		7BF3D4EF111366FE00E5BBAE /* glite_cream_job.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = glite_cream_job.hpp; sourceTree = "<group>"; };
+		7BF3D4F0111366FE00E5BBAE /* glite_cream_job_adaptor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glite_cream_job_adaptor.cpp; sourceTree = "<group>"; };
+		7BF3D4F1111366FE00E5BBAE /* glite_cream_job_adaptor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = glite_cream_job_adaptor.hpp; sourceTree = "<group>"; };
+		7BF3D4F2111366FE00E5BBAE /* glite_cream_job_adaptor.ini */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = glite_cream_job_adaptor.ini; sourceTree = "<group>"; };
+		7BF3D4F3111366FE00E5BBAE /* glite_cream_job_async.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glite_cream_job_async.cpp; sourceTree = "<group>"; };
+		7BF3D4F4111366FE00E5BBAE /* glite_cream_job_istream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = glite_cream_job_istream.hpp; sourceTree = "<group>"; };
+		7BF3D4F5111366FE00E5BBAE /* glite_cream_job_ostream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = glite_cream_job_ostream.hpp; sourceTree = "<group>"; };
+		7BF3D4F6111366FE00E5BBAE /* glite_cream_job_proxy_wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glite_cream_job_proxy_wrapper.cpp; sourceTree = "<group>"; };
+		7BF3D4F7111366FE00E5BBAE /* glite_cream_job_proxy_wrapper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = glite_cream_job_proxy_wrapper.hpp; sourceTree = "<group>"; };
+		7BF3D4F8111366FE00E5BBAE /* glite_cream_job_service.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glite_cream_job_service.cpp; sourceTree = "<group>"; };
+		7BF3D4F9111366FE00E5BBAE /* glite_cream_job_service.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = glite_cream_job_service.hpp; sourceTree = "<group>"; };
+		7BF3D4FA111366FE00E5BBAE /* glite_cream_job_service_async.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glite_cream_job_service_async.cpp; sourceTree = "<group>"; };
+		7BF3D4FB111366FE00E5BBAE /* glite_cream_job_stream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = glite_cream_job_stream.hpp; sourceTree = "<group>"; };
+		7BF3D4FC111366FE00E5BBAE /* glite_cream_job_utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = glite_cream_job_utils.hpp; sourceTree = "<group>"; };
+		7BF3D4FD111366FE00E5BBAE /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		7BF3D4FF111366FE00E5BBAE /* glite_cream_job_test.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = glite_cream_job_test.py; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7BF50E010B9A9AF90073E20C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7BF3D42C1113638A00E5BBAE /* libsaga_engine.dylib in Frameworks */,
+				7BF3D42D1113638A00E5BBAE /* libsaga_package_job.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0867D691FE84028FC02AAC07 /* saga_engine */ = {
+			isa = PBXGroup;
+			children = (
+				7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */,
+				7BF3D4741113648200E5BBAE /* saga_x509_adaptor.xcodeproj */,
+				7B23DF110B978DCD00054F67 /* Source */,
+				7BEE45770C39BDEA003D8E05 /* libsaga_adaptor_globus_gram_job.dylib */,
+			);
+			comments = "  - GLOBUS_LOCATION     (default: /usr/local/globus-4.0.3)\n    This variable must point to the root directory of you Globus Toolkit 4 \n    installation.\n    \n  - GLOBUS_FLAVOR       (default: gcc32dbg)\n    This variable must contain the name of the installed Globus flavor you \n    want to use (look in GLOBUS_LOCATION/include for installed flavors).";
+			name = saga_engine;
+			sourceTree = "<group>";
+		};
+		7B23DF110B978DCD00054F67 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				7BF3D4ED111366FE00E5BBAE /* glite_cream_job */,
+			);
+			indentWidth = 4;
+			name = Source;
+			sourceTree = SOURCE_ROOT;
+			tabWidth = 4;
+		};
+		7BF3D3F21113622100E5BBAE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7BF3D4011113622100E5BBAE /* libsaga_engine.dylib */,
+				7BF3D4031113622100E5BBAE /* libsaga_package_namespace.dylib */,
+				7BF3D4051113622100E5BBAE /* libsaga_package_file.dylib */,
+				7BF3D4071113622100E5BBAE /* libsaga_package_advert.dylib */,
+				7BF3D4091113622100E5BBAE /* libsaga_package_replica.dylib */,
+				7BF3D40B1113622100E5BBAE /* libsaga_package_job.dylib */,
+				7BF3D40D1113622100E5BBAE /* libsaga_package_rpc.dylib */,
+				7BF3D40F1113622100E5BBAE /* libsaga_package_stream.dylib */,
+				7BF3D4111113622100E5BBAE /* libsaga_package_sd.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7BF3D4751113648200E5BBAE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7BF3D4801113648200E5BBAE /* libsaga_adaptor_x509_context.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7BF3D4ED111366FE00E5BBAE /* glite_cream_job */ = {
+			isa = PBXGroup;
+			children = (
+				7BF3D4EE111366FE00E5BBAE /* glite_cream_job.cpp */,
+				7BF3D4EF111366FE00E5BBAE /* glite_cream_job.hpp */,
+				7BF3D4F0111366FE00E5BBAE /* glite_cream_job_adaptor.cpp */,
+				7BF3D4F1111366FE00E5BBAE /* glite_cream_job_adaptor.hpp */,
+				7BF3D4F2111366FE00E5BBAE /* glite_cream_job_adaptor.ini */,
+				7BF3D4F3111366FE00E5BBAE /* glite_cream_job_async.cpp */,
+				7BF3D4F4111366FE00E5BBAE /* glite_cream_job_istream.hpp */,
+				7BF3D4F5111366FE00E5BBAE /* glite_cream_job_ostream.hpp */,
+				7BF3D4F6111366FE00E5BBAE /* glite_cream_job_proxy_wrapper.cpp */,
+				7BF3D4F7111366FE00E5BBAE /* glite_cream_job_proxy_wrapper.hpp */,
+				7BF3D4F8111366FE00E5BBAE /* glite_cream_job_service.cpp */,
+				7BF3D4F9111366FE00E5BBAE /* glite_cream_job_service.hpp */,
+				7BF3D4FA111366FE00E5BBAE /* glite_cream_job_service_async.cpp */,
+				7BF3D4FB111366FE00E5BBAE /* glite_cream_job_stream.hpp */,
+				7BF3D4FC111366FE00E5BBAE /* glite_cream_job_utils.hpp */,
+				7BF3D4FD111366FE00E5BBAE /* Makefile */,
+				7BF3D4FE111366FE00E5BBAE /* test */,
+			);
+			name = glite_cream_job;
+			path = ../glite_cream_job;
+			sourceTree = SOURCE_ROOT;
+		};
+		7BF3D4FE111366FE00E5BBAE /* test */ = {
+			isa = PBXGroup;
+			children = (
+				7BF3D4FF111366FE00E5BBAE /* glite_cream_job_test.py */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7BF50DFB0B9A9AF90073E20C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7BF3D501111366FE00E5BBAE /* glite_cream_job.hpp in Headers */,
+				7BF3D503111366FE00E5BBAE /* glite_cream_job_adaptor.hpp in Headers */,
+				7BF3D505111366FE00E5BBAE /* glite_cream_job_istream.hpp in Headers */,
+				7BF3D506111366FE00E5BBAE /* glite_cream_job_ostream.hpp in Headers */,
+				7BF3D508111366FE00E5BBAE /* glite_cream_job_proxy_wrapper.hpp in Headers */,
+				7BF3D50A111366FE00E5BBAE /* glite_cream_job_service.hpp in Headers */,
+				7BF3D50C111366FE00E5BBAE /* glite_cream_job_stream.hpp in Headers */,
+				7BF3D50D111366FE00E5BBAE /* glite_cream_job_utils.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_glite_cream_job */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7BF50E070B9A9AF90073E20C /* Build configuration list for PBXNativeTarget "libsaga_adaptor_glite_cream_job" */;
+			buildPhases = (
+				7BF50DFB0B9A9AF90073E20C /* Headers */,
+				7BF50DFC0B9A9AF90073E20C /* Sources */,
+				7BF50E010B9A9AF90073E20C /* Frameworks */,
+				7B7AB6670BB31916003C4CBE /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7BF3D441111363EC00E5BBAE /* PBXTargetDependency */,
+				7BF3D443111363EC00E5BBAE /* PBXTargetDependency */,
+				7BF3D4CE111365FF00E5BBAE /* PBXTargetDependency */,
+			);
+			name = libsaga_adaptor_glite_cream_job;
+			productName = Untitled;
+			productReference = 7BEE45770C39BDEA003D8E05 /* libsaga_adaptor_globus_gram_job.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB916408733D950010E9CD /* Build configuration list for PBXProject "saga_glite_adaptors" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 1;
+			mainGroup = 0867D691FE84028FC02AAC07 /* saga_engine */;
+			productRefGroup = 0867D691FE84028FC02AAC07 /* saga_engine */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 7BF3D3F21113622100E5BBAE /* Products */;
+					ProjectRef = 7B2AE5C60B9A7CD3009E3D9D /* saga_engine.leopard.xcodeproj */;
+				},
+				{
+					ProductGroup = 7BF3D4751113648200E5BBAE /* Products */;
+					ProjectRef = 7BF3D4741113648200E5BBAE /* saga_x509_adaptor.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				7BF7D4F7110F7A5600A37260 /* Everything */,
+				7B6DA6890B9A2DA100168752 /* All Adaptors */,
+				7BF7D4F2110F7A2B00A37260 /* All Tests */,
+				7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_glite_cream_job */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		7BF3D4011113622100E5BBAE /* libsaga_engine.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_engine.dylib;
+			remoteRef = 7BF3D4001113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D4031113622100E5BBAE /* libsaga_package_namespace.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_namespace.dylib;
+			remoteRef = 7BF3D4021113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D4051113622100E5BBAE /* libsaga_package_file.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_file.dylib;
+			remoteRef = 7BF3D4041113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D4071113622100E5BBAE /* libsaga_package_advert.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_advert.dylib;
+			remoteRef = 7BF3D4061113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D4091113622100E5BBAE /* libsaga_package_replica.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_replica.dylib;
+			remoteRef = 7BF3D4081113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D40B1113622100E5BBAE /* libsaga_package_job.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_job.dylib;
+			remoteRef = 7BF3D40A1113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D40D1113622100E5BBAE /* libsaga_package_rpc.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_rpc.dylib;
+			remoteRef = 7BF3D40C1113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D40F1113622100E5BBAE /* libsaga_package_stream.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_stream.dylib;
+			remoteRef = 7BF3D40E1113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D4111113622100E5BBAE /* libsaga_package_sd.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_package_sd.dylib;
+			remoteRef = 7BF3D4101113622100E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BF3D4801113648200E5BBAE /* libsaga_adaptor_x509_context.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libsaga_adaptor_x509_context.dylib;
+			remoteRef = 7BF3D47F1113648200E5BBAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7BF50DFC0B9A9AF90073E20C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7BF3D500111366FE00E5BBAE /* glite_cream_job.cpp in Sources */,
+				7BF3D502111366FE00E5BBAE /* glite_cream_job_adaptor.cpp in Sources */,
+				7BF3D504111366FE00E5BBAE /* glite_cream_job_async.cpp in Sources */,
+				7BF3D507111366FE00E5BBAE /* glite_cream_job_proxy_wrapper.cpp in Sources */,
+				7BF3D509111366FE00E5BBAE /* glite_cream_job_service.cpp in Sources */,
+				7BF3D50B111366FE00E5BBAE /* glite_cream_job_service_async.cpp in Sources */,
+				7BF3D50E111366FE00E5BBAE /* Makefile in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7B9FBA090BB1D18600E9EA8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7BF50DFA0B9A9AF90073E20C /* libsaga_adaptor_glite_cream_job */;
+			targetProxy = 7B9FBA080BB1D18600E9EA8D /* PBXContainerItemProxy */;
+		};
+		7BF3D441111363EC00E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = saga_engine;
+			targetProxy = 7BF3D440111363EC00E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF3D443111363EC00E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = saga_package_job;
+			targetProxy = 7BF3D442111363EC00E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF3D4CE111365FF00E5BBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libsaga_adaptor_x509_context;
+			targetProxy = 7BF3D4CD111365FF00E5BBAE /* PBXContainerItemProxy */;
+		};
+		7BF7D4FB110F7A5C00A37260 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7BF7D4F2110F7A2B00A37260 /* All Tests */;
+			targetProxy = 7BF7D4FA110F7A5C00A37260 /* PBXContainerItemProxy */;
+		};
+		7BF7D4FD110F7A5C00A37260 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7B6DA6890B9A2DA100168752 /* All Adaptors */;
+			targetProxy = 7BF7D4FC110F7A5C00A37260 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB916508733D950010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_64_BIT_PRE_XCODE_3_1 = x86_64;
+				BOOST_LOCATION = "/usr/local/boost-1.40.0/";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)/lib/";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 05;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
+				GLOBUS_FLAVOR = gcc32dbgpthr;
+				GLOBUS_LOCATION = "/usr/local/globus-4.2.0";
+				HEADER_SEARCH_PATHS = (
+					"$(BOOST_LOCATION)/include/",
+					"$(GLOBUS_LOCATION)/include/$(GLOBUS_FLAVOR)",
+					"$(HEADER_SEARCH_PATHS_SAGA)",
+					"$(HEADER_SEARCH_PATHS_BOOST_FUTURES)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PLUGIN)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PROCESS)",
+					"$(HEADER_SEARCH_PATHS_BOOST_SPIRIT)",
+				);
+				HEADER_SEARCH_PATHS_BOOST_ASIO = "\"$(PROJECT_DIR)/../../../external/boost/asio/\"";
+				HEADER_SEARCH_PATHS_BOOST_FUTURES = "\"$(PROJECT_DIR)/../../../external/boost/futures/\"";
+				HEADER_SEARCH_PATHS_BOOST_PLUGIN = "\"$(PROJECT_DIR)/../../../external/boost/plugin/\"";
+				HEADER_SEARCH_PATHS_BOOST_PROCESS = "\"$(PROJECT_DIR)/../../../external/boost/process/\"";
+				HEADER_SEARCH_PATHS_BOOST_PYTHON = "\"$(PROJECT_DIR)/../../../external/boost/python/\"";
+				HEADER_SEARCH_PATHS_BOOST_SPIRIT = "\"$(PROJECT_DIR)/../../../external/boost/spirit/\"";
+				HEADER_SEARCH_PATHS_BOOST_SYSTEM = "\"$(PROJECT_DIR)/../../../external/boost/system/\"";
+				HEADER_SEARCH_PATHS_SAGA = "\"$(PROJECT_DIR)/../../../\"";
+				KEEP_PRIVATE_EXTERNS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BOOST_LOCATION)/lib/",
+					"$(GLOBUS_LOCATION)/lib",
+				);
+				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
+				OTHER_CFLAGS = "-Wall";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fvisibility=default",
+					"-DSAGA_GCC_HAVE_VISIBILITY=1",
+					"-DSAGA_HAVE_PACKAGE_JOB=1",
+					"$(OTHER_CPLUSPLUSFLAGS_QUOTED_FOR_PROJECT_1)",
+				);
+				OTHER_LDFLAGS = (
+					"-lcrypto",
+					"-lboost_thread",
+					"-lboost_serialization",
+					"-lboost_filesystem",
+					"-lboost_regex",
+					"-lboost_iostreams",
+					"-lboost_system",
+					"-lglobus_openssl_$(GLOBUS_FLAVOR)",
+					"-lglobus_gsi_proxy_core_$(GLOBUS_FLAVOR)",
+					"-lglobus_gsi_sysconfig_$(GLOBUS_FLAVOR)",
+					"-lglobus_gsi_credential_$(GLOBUS_FLAVOR)",
+				);
+				SYMROOT = ../../../../build;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		1DEB916608733D950010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_64_BIT_PRE_XCODE_3_1 = x86_64;
+				BOOST_LOCATION = "/usr/local/boost-1.40.0/";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)/lib/";
+				CURRENT_PROJECT_VERSION = 05;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				EXECUTABLE_PREFIX = lib;
+				GLOBUS_FLAVOR = gcc32dbgpthr;
+				GLOBUS_LOCATION = "/usr/local/globus-4.2.0";
+				HEADER_SEARCH_PATHS = (
+					"$(BOOST_LOCATION)/include/",
+					"$(GLOBUS_LOCATION)/include/$(GLOBUS_FLAVOR)",
+					"$(HEADER_SEARCH_PATHS_SAGA)",
+					"$(HEADER_SEARCH_PATHS_BOOST_FUTURES)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PLUGIN)",
+					"$(HEADER_SEARCH_PATHS_BOOST_PROCESS)",
+					"$(HEADER_SEARCH_PATHS_BOOST_SPIRIT)",
+				);
+				HEADER_SEARCH_PATHS_BOOST_ASIO = "\"$(PROJECT_DIR)/../../../external/boost/asio/\"";
+				HEADER_SEARCH_PATHS_BOOST_FUTURES = "\"$(PROJECT_DIR)/../../../external/boost/futures/\"";
+				HEADER_SEARCH_PATHS_BOOST_PLUGIN = "\"$(PROJECT_DIR)/../../../external/boost/plugin/\"";
+				HEADER_SEARCH_PATHS_BOOST_PROCESS = "\"$(PROJECT_DIR)/../../../external/boost/process/\"";
+				HEADER_SEARCH_PATHS_BOOST_PYTHON = "\"$(PROJECT_DIR)/../../../external/boost/python/\"";
+				HEADER_SEARCH_PATHS_BOOST_SPIRIT = "\"$(PROJECT_DIR)/../../../external/boost/spirit/\"";
+				HEADER_SEARCH_PATHS_BOOST_SYSTEM = "\"$(PROJECT_DIR)/../../../external/boost/system/\"";
+				HEADER_SEARCH_PATHS_SAGA = "\"$(PROJECT_DIR)/../../../\"";
+				KEEP_PRIVATE_EXTERNS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BOOST_LOCATION)/lib/",
+					"$(GLOBUS_LOCATION)/lib",
+				);
+				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
+				OTHER_CFLAGS = "-Wall";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fvisibility=default",
+					"-DSAGA_GCC_HAVE_VISIBILITY=1",
+					"-DSAGA_HAVE_PACKAGE_JOB=1",
+					"$(OTHER_CPLUSPLUSFLAGS_QUOTED_FOR_PROJECT_1)",
+				);
+				OTHER_LDFLAGS = (
+					"-lcrypto",
+					"-lboost_thread",
+					"-lboost_serialization",
+					"-lboost_filesystem",
+					"-lboost_regex",
+					"-lboost_iostreams",
+					"-lboost_system",
+					"-lglobus_openssl_$(GLOBUS_FLAVOR)",
+					"-lglobus_gsi_proxy_core_$(GLOBUS_FLAVOR)",
+					"-lglobus_gsi_sysconfig_$(GLOBUS_FLAVOR)",
+					"-lglobus_gsi_credential_$(GLOBUS_FLAVOR)",
+				);
+				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
+				SEPARATE_STRIP = YES;
+				SYMROOT = ../../../../build;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		7B6DA6A00B9A2DC300168752 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = ALL;
+			};
+			name = Debug;
+		};
+		7B6DA6A10B9A2DC300168752 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				PRODUCT_NAME = ALL;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7BF50E080B9A9AF90073E20C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DSAGA_ADAPTOR_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+					"-DSAGA_ADAPTOR_LIB_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lglobus_gass_transfer_$(GLOBUS_FLAVOR)",
+					"-lglobus_gram_client_$(GLOBUS_FLAVOR)",
+					"-lglobus_common_$(GLOBUS_FLAVOR)",
+					"-lglobus_gssapi_gsi_$(GLOBUS_FLAVOR)",
+					"-lglobus_gram_protocol_$(GLOBUS_FLAVOR)",
+				);
+				PRODUCT_NAME = saga_adaptor_globus_gram_job;
+			};
+			name = Debug;
+		};
+		7BF50E090B9A9AF90073E20C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DSAGA_ADAPTOR_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+					"-DSAGA_ADAPTOR_LIB_NAME=$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lglobus_gass_transfer_$(GLOBUS_FLAVOR)",
+					"-lglobus_gram_client_$(GLOBUS_FLAVOR)",
+					"-lglobus_common_$(GLOBUS_FLAVOR)",
+					"-lglobus_gssapi_gsi_$(GLOBUS_FLAVOR)",
+					"-lglobus_gram_protocol_$(GLOBUS_FLAVOR)",
+				);
+				PRODUCT_NAME = saga_adaptor_globus_gram_job;
+			};
+			name = Release;
+		};
+		7BF7D4F3110F7A2B00A37260 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "All Tests";
+			};
+			name = Debug;
+		};
+		7BF7D4F4110F7A2B00A37260 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "All Tests";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7BF7D4F8110F7A5600A37260 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = Everything;
+			};
+			name = Debug;
+		};
+		7BF7D4F9110F7A5600A37260 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = Everything;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB916408733D950010E9CD /* Build configuration list for PBXProject "saga_glite_adaptors" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB916508733D950010E9CD /* Debug */,
+				1DEB916608733D950010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7B6DA69F0B9A2DC300168752 /* Build configuration list for PBXAggregateTarget "All Adaptors" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B6DA6A00B9A2DC300168752 /* Debug */,
+				7B6DA6A10B9A2DC300168752 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7BF50E070B9A9AF90073E20C /* Build configuration list for PBXNativeTarget "libsaga_adaptor_glite_cream_job" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7BF50E080B9A9AF90073E20C /* Debug */,
+				7BF50E090B9A9AF90073E20C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7BF7D504110F7ADE00A37260 /* Build configuration list for PBXAggregateTarget "All Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7BF7D4F3110F7A2B00A37260 /* Debug */,
+				7BF7D4F4110F7A2B00A37260 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7BF7D505110F7ADE00A37260 /* Build configuration list for PBXAggregateTarget "Everything" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7BF7D4F8110F7A5600A37260 /* Debug */,
+				7BF7D4F9110F7A5600A37260 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}
