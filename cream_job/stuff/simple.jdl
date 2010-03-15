@@ -1,0 +1,7 @@
+[
+Type = "Job";
+JobType = "Normal";
+Executable = "/bin/date";
+StdOutput = "job_out.txt";
+StdError  = "job_err.txt";
+]

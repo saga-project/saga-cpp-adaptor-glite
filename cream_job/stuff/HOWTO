@@ -1,0 +1,13 @@
+#################################################
+## HOWTO USE GLITE CREAM FROM THE COMMAND LINE ##
+#################################################
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/glite/lib64/:/opt/classads/lib64/:/opt/glite/lib/
+
+voms-proxy-init -voms dteam -key ~/.globus/userkey-cern.pem -cert ~/.globus/usercert-cern.pem
+voms-proxy-info
+
+glite-ce-delegate-proxy -e cream-09.pd.infn.it mydeleg
+glite-ce-job-submit -D mydelid -r cream-09.pd.infn.it:8443/cream-lsf-grid02 simple.jdl
+
+
