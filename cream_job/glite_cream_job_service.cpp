@@ -43,6 +43,9 @@ namespace glite_cream_job
   {
     instance_data data(this);
     
+    // create a unique random delegation ID
+    delegation_id = saga::uuid().string();
+    
     // check if we can handle scheme
     if (!data->rm_.get_url().empty())
     {
@@ -91,7 +94,8 @@ namespace glite_cream_job
       check_x509_voms_cert(contexts[i], context_list, context_error_list);
     } 
     
-    if(context_list.size() <1) {
+    if(context_list.size() <1) 
+    {
         SAGA_OSSTREAM strm;
         strm << "Could not initialize job service for " << data->rm_ << ". "
              << "No valid and/or usable x.509 context could be found:\n";
@@ -100,6 +104,35 @@ namespace glite_cream_job
         }
         SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm),
                            saga::AuthorizationFailed);
+    }
+    else
+    {
+      saga::url rm(data->rm_);
+      
+      // try to delegate all (?) valid proxies to the resource manager.
+      for(unsigned int i = 0; i < context_list.size(); i++)
+      {
+        std::string errorMessage = "";
+        std::string userproxy(context_list[i].get_attribute 
+                             (saga::attributes::context_userproxy));
+        
+        saga::url serviceAddress;
+        serviceAddress.set_host(rm.get_host());
+        serviceAddress.set_scheme("https");
+        serviceAddress.set_port(8443);
+        serviceAddress.set_path("/ce-cream/services/gridsite-delegation");
+          
+        bool success = try_delegate_proxy(serviceAddress.get_url(), delegation_id, 
+                                          userproxy, errorMessage);                                 
+        if(!success)
+        {
+          SAGA_OSSTREAM strm;
+          strm << "Could not delegate (id="<< delegation_id <<") userproxy " << userproxy << " to " << serviceAddress.get_url() << ". "
+               << errorMessage;
+          SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm),
+                             saga::AuthorizationFailed);
+        }
+      } 
     }
     
   }

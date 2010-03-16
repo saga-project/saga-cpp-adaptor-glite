@@ -40,6 +40,7 @@ bool glite_cream_job::try_delegate_proxy(std::string serviceAddress,
   {
     creamClient->setCredential(localProxyPath);
     creamClient->execute(serviceAddress);
+
   } 
   catch(std::exception const & e) 
   {

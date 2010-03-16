@@ -41,6 +41,10 @@ namespace glite_cream_job
 
       // adaptor data
       typedef saga::adaptors::adaptor_data <adaptor> adaptor_data_type;
+      
+      // delegation ID - for now unique per service instance. might change
+      // in the fututre.
+      std::string delegation_id;
 
     public:
       // constructor of the job_service cpi

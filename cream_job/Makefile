@@ -36,7 +36,7 @@ SAGA_CXXFLAGS += -I$(CREAM_CLIENT_API_C_LOCATION)/include/
 SAGA_CXXFLAGS += -I$(GSOAP_LOCATION)/include/
 SAGA_CXXFLAGS += -I$(LOG4CPP_LOCATION)/include/
 
-SAGA_LDFLAGS  += -L$(CREAM_CLIENT_API_C_LOCATION)/lib64/ -lglite_ce_cream_client_soap -lglite_ce_cream_client_util -lvomsc_gcc64dbgpthr
+SAGA_LDFLAGS  += -L$(CREAM_CLIENT_API_C_LOCATION)/lib64/ -lglite_ce_cream_client_soap -lglite_ce_cream_client_util -lglite_ce_cream_client_util -lgridsite -lvomsapi_gcc64dbgpthr
 SAGA_LDFLAGS  += -L$(CREAM_CLIENT_API_C_LOCATION)/lib/ -lglite_security_gsoap_plugin_276b_gcc64dbgpthr
 SAGA_LDFLAGS  += -L$(LOG4CPP_LOCATION)/lib/ -llog4cpp
 
