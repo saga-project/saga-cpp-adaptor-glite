@@ -6,7 +6,12 @@
 #ifndef ADAPTORS_X509_CONTEXT_ADAPTOR_UTILS_HPP
 #define ADAPTORS_X509_CONTEXT_ADAPTOR_UTILS_HPP
 
+#include <saga/saga.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
+
 #include <glite/ce/cream-client-api-c/VOMSWrapper.h>
+
 using namespace glite::ce::cream_client_api::soap_proxy;
 using namespace glite::ce::cream_client_api::util;
 
@@ -85,7 +90,13 @@ inline void check_x509_voms_cert(saga::context & context,
           }
         } 
       } 
-}
+};
+
+// tries to delegate a proxy to a remote cream service. returns 'true' on
+// success and 'false' on error. 'errorMessage' will contain the error
+// message in case of 'false'.  
+bool try_delegate_proxy(std::string serviceAddress, std::string delegationID,
+                        std::string localProxyPath, std::string & errorMessage);
 
 } // namespace
 

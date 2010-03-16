@@ -38,7 +38,44 @@ namespace glite_cream_job
                               TR1::shared_ptr <saga::adaptor>   adaptor)
     : base_cpi  (p, info, adaptor, cpi::Noflags)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    instance_data data(this);
+    
+    std::cout << "job constructor: " << data->rm_.get_url() << std::endl;
+    
+    // check if we can handle scheme
+    if (!data->rm_.get_url().empty())
+    {
+        saga::url rm(data->rm_);
+        std::string host(rm.get_host());
+
+        std::string scheme(rm.get_scheme());
+
+        if (scheme != "cream" && scheme !=  "any")
+        {
+            SAGA_OSSTREAM strm;
+            strm << "Could not initialize job object for " << data->rm_ << ". "
+                 << "Only cream:// and any:// schemes are supported by this adaptor.";
+            SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+        }
+
+        if (host.empty())
+        {
+            SAGA_OSSTREAM strm;
+            strm << "Could not initialize job object for " << data->rm_ << ". "
+                 << "URL doesn't define a hostname.";
+            SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+        }
+    }
+    else
+    {
+        SAGA_OSSTREAM strm;
+        strm << "Could not initialize job object for " << data->rm_ << ". "
+             << "No URL provided and resource discovery is not implemented yet.";
+        SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm),
+                           saga::adaptors::AdaptorDeclined);
+    }
+    std::cout << "end job constructor" << std::endl;
+    //SAGA_ADAPTOR_THROW ("job object c'tor Not Implemented", saga::NotImplemented);
   }
 
 

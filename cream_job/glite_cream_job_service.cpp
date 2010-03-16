@@ -51,12 +51,12 @@ namespace glite_cream_job
 
         std::string scheme(rm.get_scheme());
 
-        if (!scheme.empty() && scheme != "cream")
+        if (scheme != "cream" && scheme !=  "any")
         {
             SAGA_OSSTREAM strm;
             strm << "Could not initialize job service for " << data->rm_ << ". "
-                 << "Only cream:// scheme is supported by this adaptor.";
-            SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter);
+                 << "Only cream:// and any:// schemes are supported by this adaptor.";
+            SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
         }
 
         if (host.empty())
@@ -64,7 +64,7 @@ namespace glite_cream_job
             SAGA_OSSTREAM strm;
             strm << "Could not initialize job service for " << data->rm_ << ". "
                  << "URL doesn't define a hostname.";
-            SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter);
+            SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
         }
     }
     else
@@ -73,7 +73,7 @@ namespace glite_cream_job
         strm << "Could not initialize job service for " << data->rm_ << ". "
              << "No URL provided and resource discovery is not implemented yet.";
         SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm),
-                           saga::BadParameter);
+                           saga::adaptors::AdaptorDeclined);
     }
 
     // check if we have x.509 contexts available and if they are usable
@@ -117,7 +117,35 @@ namespace glite_cream_job
     job_service_cpi_impl::sync_create_job (saga::job::job         & ret, 
                                            saga::job::description   jd)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    instance_data data(this);   
+
+    saga::attribute attr (jd);
+    // A job description needs at least an 'Executable' 
+    // attribute. Doesn't make sense without one.
+    if (!attr.attribute_exists(saga::job::attributes::description_executable) ||
+        attr.get_attribute(saga::job::attributes::description_executable).empty())
+    {
+      SAGA_OSSTREAM strm;
+		  strm << "Could not create a job object for " << data->rm_ << ". " 
+           << "The job description is missing the mandatory 'executable' attribute.";
+		  SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter); 
+    }
+    
+    try {
+        // TODO: translate job description into JDL
+    }
+    catch(std::exception const & e)
+    {
+      SAGA_OSSTREAM strm;
+		  strm << "Could not create a job object for " << data->rm_ << ". " 
+           << e.what();
+		  SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter); 
+    }
+    
+    
+    saga::job::job job = saga::adaptors::job(data->rm_, jd, 
+                                             proxy_->get_session());
+    ret = job;
   }
 
   void 
