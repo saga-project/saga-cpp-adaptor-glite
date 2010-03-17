@@ -8,7 +8,7 @@
 
 using namespace glite::ce::cream_client_api::soap_proxy;
 using namespace glite::ce::cream_client_api::util;
-namespace API = glite::ce::cream_client_api::soap_proxy;
+namespace CreamAPI = glite::ce::cream_client_api::soap_proxy;
 
 #include "glite_cream_job_utils.hpp"
 
@@ -21,8 +21,8 @@ bool glite_cream_job::try_delegate_proxy(std::string serviceAddress,
 {
   int connectionTimeout = 30; // seconds
   
-  API::AbsCreamProxy * creamClient = 
-    API::CreamProxyFactory::make_CreamProxyDelegate(delegationID, connectionTimeout);
+  CreamAPI::AbsCreamProxy * creamClient = 
+    CreamAPI::CreamProxyFactory::make_CreamProxyDelegate(delegationID, connectionTimeout);
   
   if(localProxyPath.empty())
   {

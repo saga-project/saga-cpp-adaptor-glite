@@ -22,8 +22,17 @@
 
 // adaptor includes
 #include "glite_cream_job.hpp"
+#include "glite_cream_job_utils.hpp"
 #include "glite_cream_job_istream.hpp"
 #include "glite_cream_job_ostream.hpp"
+
+// glite cream api includes
+#include <glite/ce/cream-client-api-c/VOMSWrapper.h>
+#include <glite/ce/cream-client-api-c/CreamProxyFactory.h>
+#include <glite/ce/cream-client-api-c/JobDescriptionWrapper.h>
+using namespace glite::ce::cream_client_api::soap_proxy;
+using namespace glite::ce::cream_client_api::util;
+namespace CreamAPI = glite::ce::cream_client_api::soap_proxy;
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -40,14 +49,11 @@ namespace glite_cream_job
   {
     instance_data data(this);
     
-    std::cout << "job constructor: " << data->rm_.get_url() << std::endl;
-    
     // check if we can handle scheme
     if (!data->rm_.get_url().empty())
     {
         saga::url rm(data->rm_);
         std::string host(rm.get_host());
-
         std::string scheme(rm.get_scheme());
 
         if (scheme != "cream" && scheme !=  "any")
@@ -74,8 +80,80 @@ namespace glite_cream_job
         SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm),
                            saga::adaptors::AdaptorDeclined);
     }
-    std::cout << "end job constructor" << std::endl;
-    //SAGA_ADAPTOR_THROW ("job object c'tor Not Implemented", saga::NotImplemented);
+    
+    // Let's extract the hidden delegation ID
+    if (data->jd_.attribute_exists(saga::job::attributes::description_job_contact)) {
+      this->delegate_id = data->jd_.get_attribute(saga::job::attributes::description_job_contact);
+               
+      SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
+        std::cerr << DBG_PRFX << "Extracted delegate ID " << this->delegate_id 
+                  << " for this job. " << std::endl;
+      }
+      
+    }
+    else {
+      SAGA_ADAPTOR_THROW("Unexpected error: Delegation ID is missing!", saga::NoSuccess);
+    }
+    
+    // Inital job state is 'Unknown' since the job is not started yet.
+    update_state(saga::job::Unknown);
+    
+    if (data->init_from_jobid_) 
+    {
+      // Job was constructed by the get_job factory method with a JobID. 
+      // This means that we have to connect to an existing job. If we can 
+      // connect to the job, we have to:
+      //   - set the current state
+      //   - try to reconstruct the job description
+      SAGA_ADAPTOR_THROW ("Job Re-connection Not Implemented yet", saga::NotImplemented);
+    } // init from job id
+    else
+    {
+      // From now on the job is in 'New' state - ready to run!
+      //update_state(saga::job::New);
+      std::string jdl;
+      
+      try {
+        jdl = glite_cream_job::create_jsl_from_sjd(data->jd_);
+        SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
+          std::cerr << DBG_PRFX << "Created JDL: " << jdl << std::endl;
+        } 
+      }
+      catch(std::exception const & e)
+      {
+        SAGA_OSSTREAM strm;
+		    strm << "Could not create a job object for " << data->rm_ << ". " 
+             << e.what();
+		    SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter); 
+      }
+      
+      // Let's try to register the job with the CREAM CE.
+      bool autostart = false;
+      std::map<std::string, std::string> properties;
+      std::string localCreamJID;
+      
+      std::string leaseID = "";
+      std::string delegationProxy = "";
+      
+      CreamAPI::JobDescriptionWrapper jd(jdl, this->delegate_id, leaseID, delegationProxy, autostart, "foo");
+      
+      CreamAPI::AbsCreamProxy::RegisterArrayRequest reqs;
+      reqs.push_back( &jd );
+      CreamAPI::AbsCreamProxy::RegisterArrayResult resp;
+      
+      int connection_timeout = 30;
+      
+      CreamAPI::AbsCreamProxy* creamClient = 
+        CreamAPI::CreamProxyFactory::make_CreamProxyRegister(&reqs, &resp, connection_timeout);
+      
+      if(NULL == creamClient)
+      {
+        SAGA_ADAPTOR_THROW("Unexpected: creamClient pointer is NULL.", saga::NoSuccess);
+      }
+      
+      
+    } // init from jd
+  
   }
 
 
@@ -167,6 +245,18 @@ namespace glite_cream_job
   {
     SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
+  
+  
+  /////////////////////////////////////////////////////////////////////
+  // utility functions, etc... 
+  void job_cpi_impl::update_state(saga::job::state newstate)
+  {
+    saga::monitorable monitor (this->proxy_);
+    saga::adaptors::metric m (monitor.get_metric(saga::metrics::task_state));
+    m.set_attribute(saga::attributes::metric_value, 
+                    saga::adaptors::job_state_enum_to_value(newstate));
+  }
+
 
 } // namespace glite_cream_job
 ////////////////////////////////////////////////////////////////////////

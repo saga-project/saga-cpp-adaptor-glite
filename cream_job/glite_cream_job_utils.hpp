@@ -16,7 +16,7 @@ using namespace glite::ce::cream_client_api::soap_proxy;
 using namespace glite::ce::cream_client_api::util;
 
 
-#define DBG_PRFX    "### GLITE CREAM ADAPTOR ### "
+#define DBG_PRFX    "gLite Cream Adaptor: "
 
 namespace glite_cream_job
 {
@@ -40,7 +40,7 @@ inline void check_x509_voms_cert(saga::context & context,
         std::string userproxy(context.get_attribute (saga::attributes::context_userproxy));
         error += "x.509 user proxy @ " + userproxy + ": ";
         SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
-          std::cerr << "gLite CREAM Adaptor: X.509 context found pointing to user proxy at " 
+          std::cerr << DBG_PRFX << "X.509 context found pointing to user proxy at " 
                     << userproxy << std::endl;
         }
         
@@ -59,7 +59,7 @@ inline void check_x509_voms_cert(saga::context & context,
             error += V.getErrorMessage();
             context_error_list.push_back(error);
             SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
-            std::cerr << "gLite CREAM Adaptor: Coundl't open proxyfile: " 
+            std::cerr << DBG_PRFX << "Coundl't open proxyfile: " 
                       << V.getErrorMessage() << std::endl;
             }
 	        }
@@ -67,7 +67,7 @@ inline void check_x509_voms_cert(saga::context & context,
             error += V.getErrorMessage();
             context_error_list.push_back(error);
             SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
-              std::cerr << "gLite CREAM Adaptor: Error while reading proxyfile: " 
+              std::cerr << DBG_PRFX << "Error while reading proxyfile: " 
                         << V.getErrorMessage() << std::endl;
             }
           }
@@ -78,7 +78,7 @@ inline void check_x509_voms_cert(saga::context & context,
             error += "Certificate is expired. Please check.";
             context_error_list.push_back(error);
             SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
-              std::cerr << "gLite CREAM Adaptor: Certificate is expired. Please check. " 
+              std::cerr << DBG_PRFX << "Certificate is expired. Please check. " 
                         << std::endl;
             }
           }
@@ -86,7 +86,7 @@ inline void check_x509_voms_cert(saga::context & context,
           {
             // SUCCESS
             SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
-              std::cerr << "gLite CREAM Adaptor: Certificate is VALID and can be used." 
+              std::cerr << DBG_PRFX << "Certificate is VALID and can be used." 
                         << std::endl;
             }
             context_list.push_back (context);

@@ -61,7 +61,10 @@ namespace glite_cream_job
                  << "Only cream:// and any:// schemes are supported by this adaptor.";
             SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
         }
-
+            SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
+              std::cerr << DBG_PRFX << "Certificate is expired. Please check. " 
+                        << std::endl;
+            }
         if (host.empty())
         {
             SAGA_OSSTREAM strm;
@@ -118,6 +121,7 @@ namespace glite_cream_job
                              (saga::attributes::context_userproxy));
         
         saga::url serviceAddress;
+        serviceAddress.set_path("/ce-cream/services/gridsite-delegation");
         serviceAddress.set_host(rm.get_host());
         serviceAddress.set_scheme("https");
         serviceAddress.set_port(8443);
@@ -132,6 +136,13 @@ namespace glite_cream_job
                << errorMessage;
           SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm),
                              saga::AuthorizationFailed);
+        }
+        else
+        {          
+          SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
+            std::cerr << DBG_PRFX << "Delegated (id="<< delegation_id <<") userproxy " << userproxy << " to " << serviceAddress.get_url() << ". "
+                      << std::endl;
+          }
         }
       } 
     }
@@ -153,11 +164,10 @@ namespace glite_cream_job
   {
     instance_data data(this);   
 
-    saga::attribute attr (jd);
     // A job description needs at least an 'Executable' 
     // attribute. Doesn't make sense without one.
-    if (!attr.attribute_exists(saga::job::attributes::description_executable) ||
-        attr.get_attribute(saga::job::attributes::description_executable).empty())
+    if (!jd.attribute_exists(saga::job::attributes::description_executable) ||
+        jd.get_attribute(saga::job::attributes::description_executable).empty())
     {
       SAGA_OSSTREAM strm;
 		  strm << "Could not create a job object for " << data->rm_ << ". " 
@@ -165,19 +175,9 @@ namespace glite_cream_job
 		  SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter); 
     }
     
-    try {
-      SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
-        std::cerr << DBG_PRFX << "JDL: " << glite_cream_job::create_jsl_from_sjd(jd) << std::endl;
-      } 
-    }
-    catch(std::exception const & e)
-    {
-      SAGA_OSSTREAM strm;
-		  strm << "Could not create a job object for " << data->rm_ << ". " 
-           << e.what();
-		  SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter); 
-    }
-    
+    // we're going to abuse the JobContact attribute to smuggle the 
+    // delegation ID into the job instance.     jd.set_attribute(saga::job::attributes::description_job_contact, this->delegation_id);
+    jd.set_attribute(saga::job::attributes::description_job_contact, this->delegation_id);
     
     saga::job::job job = saga::adaptors::job(data->rm_, jd, 
                                              proxy_->get_session());
