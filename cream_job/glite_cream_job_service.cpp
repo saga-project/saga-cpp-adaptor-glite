@@ -91,6 +91,7 @@ namespace glite_cream_job
     
     for (unsigned int i = 0; i < contexts.size (); i++)
     {
+      // context_list contains a list of valid x509 VOMS contexts
       check_x509_voms_cert(contexts[i], context_list, context_error_list);
     } 
     
@@ -138,7 +139,7 @@ namespace glite_cream_job
   }
 
   ////////////////////////////////////////////////////////////////////////
-  // destuctor
+  // destructor
   job_service_cpi_impl::~job_service_cpi_impl (void)
   {
 
@@ -165,7 +166,9 @@ namespace glite_cream_job
     }
     
     try {
-        // TODO: translate job description into JDL
+      SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
+        std::cerr << DBG_PRFX << "JDL: " << glite_cream_job::create_jsl_from_sjd(jd) << std::endl;
+      } 
     }
     catch(std::exception const & e)
     {

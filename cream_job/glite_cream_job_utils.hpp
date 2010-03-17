@@ -15,6 +15,9 @@
 using namespace glite::ce::cream_client_api::soap_proxy;
 using namespace glite::ce::cream_client_api::util;
 
+
+#define DBG_PRFX    "### GLITE CREAM ADAPTOR ### "
+
 namespace glite_cream_job
 {
 
