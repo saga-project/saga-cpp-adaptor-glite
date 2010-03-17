@@ -57,6 +57,9 @@ bool glite_cream_job::try_delegate_proxy(std::string serviceAddress,
 
 ////////////////////////////////////////////////////////////////////////////////
 //
+std::string glite_cream_job::create_jsl_from_sjd (const saga::job::description & jd)
+{
 
+}
 
 

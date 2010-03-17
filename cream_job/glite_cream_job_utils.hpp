@@ -97,6 +97,9 @@ inline void check_x509_voms_cert(saga::context & context,
 // message in case of 'false'.  
 bool try_delegate_proxy(std::string serviceAddress, std::string delegationID,
                         std::string localProxyPath, std::string & errorMessage);
+                        
+std::string create_jsl_from_sjd (const saga::job::description & jd);
+
 
 } // namespace
 
