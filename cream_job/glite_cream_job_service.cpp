@@ -22,8 +22,11 @@
 #include <saga/saga/packages/job/adaptors/job_self.hpp>
 
 #include <glite/ce/cream-client-api-c/VOMSWrapper.h>
+#include <glite/ce/cream-client-api-c/CreamProxyFactory.h>
+#include <glite/ce/cream-client-api-c/JobDescriptionWrapper.h>
 using namespace glite::ce::cream_client_api::soap_proxy;
 using namespace glite::ce::cream_client_api::util;
+namespace CreamAPI = glite::ce::cream_client_api::soap_proxy;
 
 // adaptor includes
 #include "glite_cream_job_service.hpp"
@@ -189,10 +192,40 @@ namespace glite_cream_job
     SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
 
-  void 
-    job_service_cpi_impl::sync_list (std::vector <std::string> & ret)
+
+  //////////////////////////////////////////////////////////////////////////////
+  //
+  void job_service_cpi_impl::sync_list (std::vector <std::string> & ret)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    instance_data data(this);   
+      
+    std::vector<CreamAPI::JobIdWrapper> jid_wrapper_v;
+    
+    CreamAPI::AbsCreamProxy* creamClient =  
+      CreamAPI::CreamProxyFactory::make_CreamProxyList(&jid_wrapper_v, 30); // todo: timeout
+      
+    if(NULL == creamClient)
+    {
+      SAGA_ADAPTOR_THROW("Unexpected: creamClient pointer is NULL in sync_list().", saga::NoSuccess);
+    }
+        
+    try {
+      creamClient->setCredential(this->userproxy_);
+      creamClient->execute(saga_to_cream2_service_url(data->rm_.get_url()));
+    }
+    catch(std::exception const & e)
+    {
+      SAGA_ADAPTOR_THROW("Could not get a list of jobs: "+e.what(), saga::NoSuccess);
+      delete creamClient;
+    }  
+    
+    std::vector<CreamAPI::JobIdWrapper>::const_iterator job_it = jid_wrapper_v.begin();
+    while(job_it != jid_wrapper_v.end()) {
+      ret.push_back(job_it->getCreamURL() + "/" +job_it->getCreamJobID());
+      ++job_it;
+    }
+    
+    delete creamClient;
   }
 
   void

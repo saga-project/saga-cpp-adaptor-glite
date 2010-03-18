@@ -24,6 +24,13 @@
 // job package includes
 #include <saga/impl/packages/job/job_cpi.hpp>
 
+// glite cream includes
+#include <glite/ce/cream-client-api-c/CreamProxyFactory.h>
+#include <glite/ce/cream-client-api-c/JobDescriptionWrapper.h>
+#include <glite/ce/cream-client-api-c/JobFilterWrapper.h>
+
+namespace CreamAPI = glite::ce::cream_client_api::soap_proxy;
+
 // adaptor includes
 #include "glite_cream_job_adaptor.hpp"
 
@@ -42,8 +49,13 @@ namespace glite_cream_job
       void update_state(saga::job::state newstate);
       
       std::string delegate_;
+
       std::string userproxy_;
       std::string internal_jobid_;
+      
+      //CreamAPI::JobDescriptionWrapper job_description_wrapper_;
+      //CreamAPI::JobIdWrapper job_id_wrapper_;
+     
 
     public:
       // constructor of the job adaptor

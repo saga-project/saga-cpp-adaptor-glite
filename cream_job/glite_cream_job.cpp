@@ -165,7 +165,7 @@ namespace glite_cream_job
       
       if(NULL == creamClient)
       {
-        SAGA_ADAPTOR_THROW("Unexpected: creamClient pointer is NULL.", saga::NoSuccess);
+        SAGA_ADAPTOR_THROW("Unexpected: creamClient pointer is NULL in job c'tor.", saga::NoSuccess);
       }
 
       try {
@@ -178,6 +178,7 @@ namespace glite_cream_job
       catch(std::exception const & e)
       {
         SAGA_ADAPTOR_THROW("Could not register job: "+e.what(), saga::NoSuccess);
+        delete creamClient;
       }
       
       boost::tuple<bool, CreamAPI::JobIdWrapper, std::string> 
@@ -186,10 +187,19 @@ namespace glite_cream_job
       if(CreamAPI::JobIdWrapper::OK != registrationResponse.get<0>())
       {
         SAGA_ADAPTOR_THROW("Could not register job: "+registrationResponse.get<2>(), saga::NoSuccess);
+        delete creamClient;
       }
       else
       {
-        std::cout << registrationResponse.get<2>() << std::endl;
+        std::string creamURL = registrationResponse.get<1>().getCreamURL();
+        std::string creamJID = registrationResponse.get<1>().getCreamJobID();
+        creamJID = creamURL + "/" + creamJID;
+        
+        update_state(saga::job::New);
+        saga::adaptors::attribute attr (this);
+        attr.set_attribute (saga::job::attributes::jobid, creamJID);
+
+        delete creamClient;
       }
       
       
@@ -207,7 +217,11 @@ namespace glite_cream_job
   //  SAGA API functions
   void job_cpi_impl::sync_get_state (saga::job::state & ret)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    // todo: implement active query!  
+    saga::monitorable monitor (this->proxy_);
+    saga::metric m (monitor.get_metric(saga::metrics::task_state));
+    ret = saga::adaptors::job_state_value_to_enum(m.get_attribute(saga::attributes::metric_value));
+
   }
 
   void job_cpi_impl::sync_get_description (saga::job::description & ret)
@@ -217,7 +231,8 @@ namespace glite_cream_job
 
   void job_cpi_impl::sync_get_job_id (std::string & ret)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    saga::attribute attr (this->proxy_);
+    ret = attr.get_attribute(saga::job::attributes::jobid);
   }
 
   // access streams for communication with the child
@@ -271,7 +286,61 @@ namespace glite_cream_job
   // inherited from the task interface
   void job_cpi_impl::sync_run (saga::impl::void_t & ret)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    instance_data data(this);
+    
+    saga::job::state state;
+    sync_get_state(state);
+    
+    // If the job is not in 'New' state, we can't run it.
+    if (saga::job::New != state) 
+    {
+      SAGA_ADAPTOR_THROW("Could not run the job: the job has already been started!",
+                         saga::IncorrectState);
+    }
+    
+    // the job already has an "official" id, since it has been registered with
+    // the cream CE in the constructor.
+    saga::attribute attr (this->proxy_);
+    std::string creamJID = attr.get_attribute(saga::job::attributes::jobid);
+    
+    CreamAPI::JobIdWrapper job(creamJID, 
+                               saga_to_cream2_service_url(data->rm_.get_url()),
+                               std::vector<CreamAPI::JobPropertyWrapper>() );
+                               
+    std::vector<CreamAPI::JobIdWrapper> job_vector;
+    job_vector.push_back(job);
+    
+    std::string leaseID = "";
+    std::vector<std::string> status_vector;
+    
+    CreamAPI::JobFilterWrapper filter_wrapper(job_vector, status_vector, -1, -1,
+                                              this->delegate_, leaseID);
+                                              
+    CreamAPI::ResultWrapper result;
+    
+    CreamAPI::AbsCreamProxy* creamClient =  
+      CreamAPI::CreamProxyFactory::make_CreamProxyStart(&filter_wrapper, &result, 30); // todo: timeout
+      
+    if(NULL == creamClient)
+    {
+      SAGA_ADAPTOR_THROW("Unexpected: creamClient pointer is NULL in sync_run().", saga::NoSuccess);
+    }
+    
+    try {
+      creamClient->setCredential(this->userproxy_);
+      creamClient->execute(saga_to_cream2_service_url(data->rm_.get_url()));
+      SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
+        std::cerr << DBG_PRFX << "Successfully registerd job with: " 
+                    << saga_to_cream2_service_url(data->rm_.get_url()) << std::endl; } 
+    }
+    catch(std::exception const & e)
+    {
+      SAGA_ADAPTOR_THROW("Could not register job: "+e.what(), saga::NoSuccess);
+      delete creamClient;
+    }  
+    
+    delete creamClient;
+    
   }
 
   void job_cpi_impl::sync_cancel (saga::impl::void_t & ret, 
@@ -279,6 +348,7 @@ namespace glite_cream_job
   {
     SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
   }
+
 
   //  wait for the child process to terminate
   void job_cpi_impl::sync_wait (bool   & ret, 
