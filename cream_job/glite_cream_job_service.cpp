@@ -44,34 +44,35 @@ namespace glite_cream_job
     instance_data data(this);
     
     // create a unique random delegation ID
-    delegation_id = saga::uuid().string();
+    delegation_ = saga::uuid().string();
     
     // check if we can handle scheme
     if (!data->rm_.get_url().empty())
     {
-        saga::url rm(data->rm_);
-        std::string host(rm.get_host());
-
-        std::string scheme(rm.get_scheme());
-
-        if (scheme != "cream" && scheme !=  "any")
+        if (!can_handle_scheme(data->rm_))
         {
             SAGA_OSSTREAM strm;
             strm << "Could not initialize job service for " << data->rm_ << ". "
                  << "Only cream:// and any:// schemes are supported by this adaptor.";
             SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
         }
-            SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
-              std::cerr << DBG_PRFX << "Certificate is expired. Please check. " 
-                        << std::endl;
-            }
-        if (host.empty())
+
+        if (!can_handle_hostname(data->rm_))
         {
             SAGA_OSSTREAM strm;
-            strm << "Could not initialize job service for " << data->rm_ << ". "
-                 << "URL doesn't define a hostname.";
+            strm << "Could not initialize job service for hostname: " << data->rm_ << ". ";
             SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
         }
+        
+        std::string batchsystem, queue;
+        if(!get_batchsystem_and_queue_from_url(batchsystem, queue, data->rm_))
+        {
+            SAGA_OSSTREAM strm;
+            strm << "Batchsystem and queue name need to be encoded in the url path: " 
+                 << "cream://<host>[:<port>]/cream-<batchsystem>-<queue-name>.";
+            SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+        }
+  
     }
     else
     {
@@ -111,38 +112,28 @@ namespace glite_cream_job
     }
     else
     {
-      saga::url rm(data->rm_);
-      
       // try to delegate all (?) valid proxies to the resource manager.
       for(unsigned int i = 0; i < context_list.size(); i++)
       {
         std::string errorMessage = "";
-        std::string userproxy(context_list[i].get_attribute 
-                             (saga::attributes::context_userproxy));
-        
-        saga::url serviceAddress;
-        serviceAddress.set_path("/ce-cream/services/gridsite-delegation");
-        serviceAddress.set_host(rm.get_host());
-        serviceAddress.set_scheme("https");
-        serviceAddress.set_port(8443);
-        serviceAddress.set_path("/ce-cream/services/gridsite-delegation");
+        this->userproxy_ = context_list[i].get_attribute(saga::attributes::context_userproxy);
           
-        bool success = try_delegate_proxy(serviceAddress.get_url(), delegation_id, 
-                                          userproxy, errorMessage);                                 
+        bool success = try_delegate_proxy(saga_to_gridsite_delegation_service_url(data->rm_), 
+                                          this->delegation_, this->userproxy_, errorMessage);                                 
         if(!success)
         {
           SAGA_OSSTREAM strm;
-          strm << "Could not delegate (id="<< delegation_id <<") userproxy " << userproxy << " to " << serviceAddress.get_url() << ". "
-               << errorMessage;
+          strm << "Could not delegate (id="<< delegation_ <<") userproxy " << this->userproxy_ << " to " 
+               << saga_to_gridsite_delegation_service_url(data->rm_) << ": " << errorMessage;
           SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm),
                              saga::AuthorizationFailed);
         }
         else
         {          
           SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
-            std::cerr << DBG_PRFX << "Delegated (id="<< delegation_id <<") userproxy " << userproxy << " to " << serviceAddress.get_url() << ". "
-                      << std::endl;
-          }
+            std::cerr << DBG_PRFX << "Successfully delegated userproxy " << this->userproxy_ 
+                      << " to " << saga_to_gridsite_delegation_service_url(data->rm_) 
+                      << " with id " << this->delegation_ << "." << std::endl; }
         }
       } 
     }
@@ -176,8 +167,11 @@ namespace glite_cream_job
     }
     
     // we're going to abuse the JobContact attribute to smuggle the 
-    // delegation ID into the job instance.     jd.set_attribute(saga::job::attributes::description_job_contact, this->delegation_id);
-    jd.set_attribute(saga::job::attributes::description_job_contact, this->delegation_id);
+    // delegation ID into the job instance.     
+    std::string packed_str = pack_delegate_and_userproxy(this->delegation_,
+                                                         this->userproxy_);
+
+    jd.set_attribute(saga::job::attributes::description_job_contact, packed_str);
     
     saga::job::job job = saga::adaptors::job(data->rm_, jd, 
                                              proxy_->get_session());

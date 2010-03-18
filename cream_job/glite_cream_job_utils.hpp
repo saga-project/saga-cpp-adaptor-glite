@@ -16,11 +16,48 @@ using namespace glite::ce::cream_client_api::soap_proxy;
 using namespace glite::ce::cream_client_api::util;
 
 
-#define DBG_PRFX    "gLite Cream Adaptor: "
+#define DBG_PRFX     "gLite Cream Adaptor: "
+#define INTERNAL_SEP "[:::]"
 
 namespace glite_cream_job
 {
+////////////////////////////////////////////////////////////////////////////////
+// returns true if scheme is supported, false otherwise
+bool can_handle_scheme(saga::url & url);
 
+
+////////////////////////////////////////////////////////////////////////////////
+// returns true if the hostname is valid, false otherwise
+bool can_handle_hostname(saga::url &url);
+
+
+////////////////////////////////////////////////////////////////////////////////
+// packs the delegate id and userproxy path into one string
+std::string pack_delegate_and_userproxy(std::string delegate, std::string userproxy);
+
+
+////////////////////////////////////////////////////////////////////////////////
+// unpacks the delegate id and userproxy path from a single string. returns
+// true on success, false otherwise.
+bool unpack_delegate_and_userproxy(std::string pack, std::string & delegate, std::string & userproxy);
+
+////////////////////////////////////////////////////////////////////////////////
+// converts a saga url to a CREAM2 service address
+std::string saga_to_cream2_service_url(saga::url url);
+
+////////////////////////////////////////////////////////////////////////////////
+// converts a saga url to a gridsite delegation service address
+std::string saga_to_gridsite_delegation_service_url(saga::url url);
+
+
+////////////////////////////////////////////////////////////////////////////////
+// tries to extract batchsystem name and queue name from an url path. returns
+// true on success, false otherwise
+bool get_batchsystem_and_queue_from_url(std::string & batchsystem, 
+                                        std::string & queue, const saga::url & url);
+
+////////////////////////////////////////////////////////////////////////////////
+//
 inline void check_x509_voms_cert(saga::context & context,
                                  std::vector<saga::context> & context_list,
                                  std::vector<std::string> & context_error_list)
@@ -86,7 +123,7 @@ inline void check_x509_voms_cert(saga::context & context,
           {
             // SUCCESS
             SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
-              std::cerr << DBG_PRFX << "Certificate is VALID and can be used." 
+              std::cerr << DBG_PRFX << "Certificate seems to be valid and can be used." 
                         << std::endl;
             }
             context_list.push_back (context);
@@ -101,7 +138,8 @@ inline void check_x509_voms_cert(saga::context & context,
 bool try_delegate_proxy(std::string serviceAddress, std::string delegationID,
                         std::string localProxyPath, std::string & errorMessage);
                         
-std::string create_jsl_from_sjd (const saga::job::description & jd);
+// creates a cream jsl from a saga job description. 
+std::string create_jsl_from_sjd (const saga::job::description & jd, const saga::url & url);
 
 
 } // namespace

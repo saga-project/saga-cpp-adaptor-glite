@@ -44,8 +44,12 @@ namespace glite_cream_job
       
       // delegation ID - for now unique per service instance. might change
       // in the fututre.
-      std::string delegation_id;
-
+      std::string delegation_;
+      
+      // x.509 certificate for the delegation ID - for now coupled to a
+      // service instance
+      std::string userproxy_;
+      
     public:
       // constructor of the job_service cpi
       job_service_cpi_impl  (proxy                           * p, 

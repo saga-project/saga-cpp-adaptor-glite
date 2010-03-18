@@ -26,6 +26,9 @@
 #include "glite_cream_job_istream.hpp"
 #include "glite_cream_job_ostream.hpp"
 
+// boost includes
+#include <boost/tokenizer.hpp>
+
 // glite cream api includes
 #include <glite/ce/cream-client-api-c/VOMSWrapper.h>
 #include <glite/ce/cream-client-api-c/CreamProxyFactory.h>
@@ -49,54 +52,66 @@ namespace glite_cream_job
   {
     instance_data data(this);
     
-    // check if we can handle scheme
+    // Inital job state is 'Unknown' since the job is not started yet.
+    update_state(saga::job::Unknown);
+    
     if (!data->rm_.get_url().empty())
     {
-        saga::url rm(data->rm_);
-        std::string host(rm.get_host());
-        std::string scheme(rm.get_scheme());
-
-        if (scheme != "cream" && scheme !=  "any")
+        if (!can_handle_scheme(data->rm_))
         {
             SAGA_OSSTREAM strm;
-            strm << "Could not initialize job object for " << data->rm_ << ". "
+            strm << "Could not initialize job service for " << data->rm_ << ". "
                  << "Only cream:// and any:// schemes are supported by this adaptor.";
             SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
         }
 
-        if (host.empty())
+        if (!can_handle_hostname(data->rm_))
         {
             SAGA_OSSTREAM strm;
-            strm << "Could not initialize job object for " << data->rm_ << ". "
-                 << "URL doesn't define a hostname.";
+            strm << "Could not initialize job service for hostname: " << data->rm_ << ". ";
+            SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+        }
+        
+        std::string batchsystem, queue;
+        if(!get_batchsystem_and_queue_from_url(batchsystem, queue, data->rm_))
+        {
+            SAGA_OSSTREAM strm;
+            strm << "Batchsystem and queue name need to be encoded in the url path: " 
+                 << "cream://<host>[:<port>]/cream-<batchsystem>-<queue-name>.";
             SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
         }
     }
     else
     {
         SAGA_OSSTREAM strm;
-        strm << "Could not initialize job object for " << data->rm_ << ". "
+        strm << "Could not initialize job service for " << data->rm_ << ". "
              << "No URL provided and resource discovery is not implemented yet.";
         SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm),
                            saga::adaptors::AdaptorDeclined);
     }
     
-    // Let's extract the hidden delegation ID
-    if (data->jd_.attribute_exists(saga::job::attributes::description_job_contact)) {
-      this->delegate_id = data->jd_.get_attribute(saga::job::attributes::description_job_contact);
-               
-      SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
-        std::cerr << DBG_PRFX << "Extracted delegate ID " << this->delegate_id 
-                  << " for this job. " << std::endl;
-      }
+    // Let's extract the hidden delegation ID and x509 path
+    if (data->jd_.attribute_exists(saga::job::attributes::description_job_contact)) 
+    {
+      std::string packed_str = data->jd_.get_attribute(saga::job::attributes::description_job_contact);
       
+      bool success = unpack_delegate_and_userproxy(packed_str, this->delegate_, this->userproxy_);
+      if(!success) {
+        SAGA_OSSTREAM strm;
+        strm << "Unexpected error: Could not unpack delegate id and userproxy from " << packed_str << ". ";
+        SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::NoSuccess);
+      }
+      else {         
+        SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
+          std::cerr << DBG_PRFX << "Extracted delegate id " << this->delegate_
+                    << " and userproxy: " << this->userproxy_ << "." << std::endl; }
+      }
     }
-    else {
-      SAGA_ADAPTOR_THROW("Unexpected error: Delegation ID is missing!", saga::NoSuccess);
+    else 
+    {
+      SAGA_ADAPTOR_THROW("Unexpected error: Delegation id and userproxy are missing!", 
+                         saga::NoSuccess);
     }
-    
-    // Inital job state is 'Unknown' since the job is not started yet.
-    update_state(saga::job::Unknown);
     
     if (data->init_from_jobid_) 
     {
@@ -114,15 +129,14 @@ namespace glite_cream_job
       std::string jdl;
       
       try {
-        jdl = glite_cream_job::create_jsl_from_sjd(data->jd_);
+        jdl = glite_cream_job::create_jsl_from_sjd(data->jd_, data->rm_);
         SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
-          std::cerr << DBG_PRFX << "Created JDL: " << jdl << std::endl;
-        } 
+          std::cerr << DBG_PRFX << "Created JDL: " << jdl << std::endl; } 
       }
       catch(std::exception const & e)
       {
         SAGA_OSSTREAM strm;
-		    strm << "Could not create a job object for " << data->rm_ << ". " 
+		    strm << "Could not create a job object for " << data->rm_ << ": " 
              << e.what();
 		    SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter); 
       }
@@ -135,7 +149,10 @@ namespace glite_cream_job
       std::string leaseID = "";
       std::string delegationProxy = "";
       
-      CreamAPI::JobDescriptionWrapper jd(jdl, this->delegate_id, leaseID, delegationProxy, autostart, "foo");
+      // create a unique random internal job id
+      this->internal_jobid_ = saga::uuid().string();
+      
+      CreamAPI::JobDescriptionWrapper jd(jdl, this->delegate_, leaseID, delegationProxy, autostart, internal_jobid_);
       
       CreamAPI::AbsCreamProxy::RegisterArrayRequest reqs;
       reqs.push_back( &jd );
@@ -149,6 +166,30 @@ namespace glite_cream_job
       if(NULL == creamClient)
       {
         SAGA_ADAPTOR_THROW("Unexpected: creamClient pointer is NULL.", saga::NoSuccess);
+      }
+
+      try {
+        creamClient->setCredential(this->userproxy_);
+        creamClient->execute(saga_to_cream2_service_url(data->rm_.get_url()));
+        SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
+          std::cerr << DBG_PRFX << "Successfully registerd job with: " 
+                    << saga_to_cream2_service_url(data->rm_.get_url()) << std::endl; } 
+      }
+      catch(std::exception const & e)
+      {
+        SAGA_ADAPTOR_THROW("Could not register job: "+e.what(), saga::NoSuccess);
+      }
+      
+      boost::tuple<bool, CreamAPI::JobIdWrapper, std::string> 
+        registrationResponse = resp[this->internal_jobid_];
+        
+      if(CreamAPI::JobIdWrapper::OK != registrationResponse.get<0>())
+      {
+        SAGA_ADAPTOR_THROW("Could not register job: "+registrationResponse.get<2>(), saga::NoSuccess);
+      }
+      else
+      {
+        std::cout << registrationResponse.get<2>() << std::endl;
       }
       
       

@@ -41,7 +41,9 @@ namespace glite_cream_job
       
       void update_state(saga::job::state newstate);
       
-      std::string delegate_id;
+      std::string delegate_;
+      std::string userproxy_;
+      std::string internal_jobid_;
 
     public:
       // constructor of the job adaptor

@@ -3,6 +3,8 @@
 //  Distributed under the Boost Software License, Version 1.0. (See accompanying 
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/tokenizer.hpp>
+
 #include <glite/ce/cream-client-api-c/VOMSWrapper.h>
 #include <glite/ce/cream-client-api-c/CreamProxyFactory.h>
 
@@ -11,6 +13,152 @@ using namespace glite::ce::cream_client_api::util;
 namespace CreamAPI = glite::ce::cream_client_api::soap_proxy;
 
 #include "glite_cream_job_utils.hpp"
+
+////////////////////////////////////////////////////////////////////////////////
+// returns true if scheme is supported, false otherwise
+bool glite_cream_job::can_handle_scheme(saga::url & url)
+{
+  std::string scheme(url.get_scheme());
+
+  if (scheme != "cream" && scheme !=  "https")
+    return false;
+  else
+    return true;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// returns true if the hostname is valid, false otherwise
+bool glite_cream_job::can_handle_hostname(saga::url & url)
+{
+  std::string hostname(url.get_host());
+  
+  if (hostname.empty())
+    return false;
+  else
+    return true;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// 
+std::string glite_cream_job::pack_delegate_and_userproxy(std::string delegate, 
+                                                         std::string userproxy)
+{
+  std::string packed_string = delegate;
+  packed_string += INTERNAL_SEP;
+  packed_string += userproxy;
+  
+  return packed_string;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// unpacks the delegate id and userproxy path from a single string
+bool glite_cream_job::unpack_delegate_and_userproxy(std::string pack, 
+                                                    std::string & delegate, 
+                                                    std::string & userproxy)
+{
+  std::vector<std::string> strings;
+  typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+    
+  boost::char_separator<char> sep(INTERNAL_SEP);
+  tokenizer tokens(pack, sep);
+    
+  for( tokenizer::iterator tok_iter = tokens.begin(); tok_iter != tokens.end(); ++tok_iter)
+    strings.push_back(*tok_iter);
+    
+  if(strings.size() == 2)
+  {
+    delegate = strings[0];
+    userproxy = strings[1];
+  }
+  else
+  {
+    return false;
+  }
+  
+  return true;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+std::string glite_cream_job::saga_to_gridsite_delegation_service_url(saga::url url)
+{
+  saga::url gsd_service_url(url.clone());
+
+  gsd_service_url.set_scheme("https");
+  if(gsd_service_url.get_port() < 0) // todo! 
+    gsd_service_url.set_port(8443);
+    
+  std::string service_path = "/ce-cream/services/gridsite-delegation";
+  gsd_service_url.set_path(service_path);
+  
+  return gsd_service_url.get_url();
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+std::string glite_cream_job::saga_to_cream2_service_url(saga::url url)
+{
+  saga::url cream2_service_url(url.clone());
+ 
+  cream2_service_url.set_scheme("https");
+  if(cream2_service_url.get_port() < 0) // todo! 
+    cream2_service_url.set_port(8443);
+  
+  std::string service_path = "/ce-cream/services/CREAM2";
+  cream2_service_url.set_path(service_path);
+  
+  return cream2_service_url.get_url();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+bool glite_cream_job::get_batchsystem_and_queue_from_url(std::string & batchsystem, 
+                                                         std::string & queue, 
+                                                         const saga::url & url)
+{
+  if(url.get_path().empty())
+  {
+    // no path - there's nothing we can do. 
+    return false;
+  }
+  
+  std::vector<std::string> strings;
+  typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+    
+  boost::char_separator<char> sep("-");
+  tokenizer tokens(url.get_path(), sep);
+    
+  for( tokenizer::iterator tok_iter = tokens.begin(); tok_iter != tokens.end(); ++tok_iter) {
+    strings.push_back(*tok_iter);
+  }
+  
+  if(strings.size() == 3)
+  {
+    if(strings[0] != "cream" && strings[0] != "/cream") 
+    {
+      // path is malformated - doesn't start with "cream-"
+      return false;
+    }
+    else
+    {
+      batchsystem = strings[1];
+      queue       = strings[2];
+    }
+  }
+  else
+  {
+    // path is malformated - can't be split up into three components 
+    return false;
+  }
+  
+  return true;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -57,7 +205,8 @@ bool glite_cream_job::try_delegate_proxy(std::string serviceAddress,
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-std::string glite_cream_job::create_jsl_from_sjd (const saga::job::description & jd)
+std::string glite_cream_job::create_jsl_from_sjd (const saga::job::description & jd, 
+                                                  const saga::url & url)
 {
   using namespace saga::job;  
   saga::attribute attr (jd);
@@ -70,7 +219,7 @@ std::string glite_cream_job::create_jsl_from_sjd (const saga::job::description &
   // Executable
   if(attr.attribute_exists(attributes::description_executable)) {
     oss << "Executable = \"" 
-        << attr.get_attribute(attributes::description_executable) << "\"|" << std::endl;
+        << attr.get_attribute(attributes::description_executable) << "\";" << std::endl;
   }
   
   // Arguments
@@ -155,6 +304,23 @@ std::string glite_cream_job::create_jsl_from_sjd (const saga::job::description &
           << project_names[0] << "\";" << std::endl;
     }
   }   
+ 
+  // we adopt the behavior from cream-pbs-cream_A - URLs can define like this:
+  // <host>[:<port>]/cream-<lrms-system-name>-<queue-name>. This allows us to
+  // encode BatchSystem and Queue in the URL. If they're not explicitly defined
+  // in the jd, we'll try to extract them from the rm url. 
+  std::string batchsystem, queue;
+  bool success = get_batchsystem_and_queue_from_url(batchsystem, queue, url);
+  if(success) 
+  {
+    oss << "QueueName = \"" << queue << "\";" << std::endl;
+    oss << "BatchSystem = \"" << batchsystem << "\";" << std::endl;
+    
+    SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
+      std::cerr << DBG_PRFX << "Successfully extracted BatchSystem (" << batchsystem 
+                << ") and Queue (" << queue << ") attributes from URL." << std::endl; }
+  }
+  
  
   oss << " ]" << std::endl;
 
