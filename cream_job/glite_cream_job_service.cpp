@@ -1,4 +1,4 @@
-//  Copyright (c) 2009 Ole Weidner (oweidner@cct.lsu.edu)
+//  Copyright (c) 2009-2010 Ole Weidner (oweidner@cct.lsu.edu)
 // 
 //  Distributed under the Boost Software License, Version 1.0. (See accompanying 
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -67,14 +67,14 @@ namespace glite_cream_job
             SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
         }
         
-        std::string batchsystem, queue;
-        if(!get_batchsystem_and_queue_from_url(batchsystem, queue, data->rm_))
-        {
-            SAGA_OSSTREAM strm;
-            strm << "Batchsystem and queue name need to be encoded in the url path: " 
-                 << "cream://<host>[:<port>]/cream-<batchsystem>-<queue-name>.";
-            SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
-        }
+        //std::string batchsystem, queue;
+        //if(!get_batchsystem_and_queue_from_url(batchsystem, queue, data->rm_))
+        //{
+        //    SAGA_OSSTREAM strm;
+        //    strm << "Batchsystem and queue name need to be encoded in the url path: " 
+        //         << "cream://<host>[:<port>]/cream-<batchsystem>-<queue-name>.";
+        //    SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
+        //}
   
     }
     else
@@ -175,6 +175,7 @@ namespace glite_cream_job
                                                          this->userproxy_);
 
     jd.set_attribute(saga::job::attributes::description_job_contact, packed_str);
+    
     
     saga::job::job job = saga::adaptors::job(data->rm_, jd, 
                                              proxy_->get_session());

@@ -1,9 +1,10 @@
-//  Copyright (c) 2010 Ole Weidner (oweidner@cct.lsu.edu)
+//  Copyright (c) 2009-2010 Ole Weidner (oweidner@cct.lsu.edu)
 // 
 //  Distributed under the Boost Software License, Version 1.0. (See accompanying 
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/tokenizer.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include <glite/ce/cream-client-api-c/VOMSWrapper.h>
 #include <glite/ce/cream-client-api-c/CreamProxyFactory.h>
@@ -12,7 +13,7 @@ using namespace glite::ce::cream_client_api::soap_proxy;
 using namespace glite::ce::cream_client_api::util;
 namespace CreamAPI = glite::ce::cream_client_api::soap_proxy;
 
-#include "glite_cream_job_utils.hpp"
+#include "glite_cream_job_utils.hpp"#include <boost/algorithm/string.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////
 // returns true if scheme is supported, false otherwise
@@ -113,6 +114,56 @@ std::string glite_cream_job::saga_to_cream2_service_url(saga::url url)
   cream2_service_url.set_path(service_path);
   
   return cream2_service_url.get_url();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// 
+std::string glite_cream_job::get_job_id_from_url(saga::url url)
+{
+  std::string path(url.get_path());
+
+  std::vector<std::string> strings;
+  typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+    
+  boost::char_separator<char> sep("/");
+  tokenizer tokens(url.get_path(), sep);
+    
+  for( tokenizer::iterator tok_iter = tokens.begin(); tok_iter != tokens.end(); ++tok_iter) {
+    strings.push_back(*tok_iter);
+  }
+
+  if( strings.size() > 0 )
+    return strings.back();
+  else
+    return "";
+}
+////////////////////////////////////////////////////////////////////////////////
+// 
+saga::job::state glite_cream_job::cream_to_saga_job_state(std::string cream_job_state)
+{
+  if(     cream_job_state == "PENDING" ||
+          cream_job_state == "IDLE"    ||
+          cream_job_state == "RUNNING" ||
+          cream_job_state == "REALLY-RUNNING")
+            return saga::job::Running;
+            
+  else if(cream_job_state == "HELD")
+            return saga::job::Suspended;
+            
+  else if(cream_job_state == "CANCELLED")
+            return saga::job::Canceled;
+            
+  else if(cream_job_state == "DONE-OK")
+            return saga::job::Done;
+            
+  else if(cream_job_state == "DONE-FAILED" ||
+          cream_job_state == "ABORTED")
+            return saga::job::Failed;
+            
+  else if(cream_job_state == "REGISTERED")
+            return saga::job::New;
+            
+  else      return saga::job::Unknown;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-//  Copyright (c) 2009 Ole Weidner (oweidner@cct.lsu.edu)
+//  Copyright (c) 2009-2010 Ole Weidner (oweidner@cct.lsu.edu)
 // 
 //  Distributed under the Boost Software License, Version 1.0. (See accompanying 
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -53,8 +53,7 @@ namespace glite_cream_job
       std::string userproxy_;
       std::string internal_jobid_;
       
-      //CreamAPI::JobDescriptionWrapper job_description_wrapper_;
-      //CreamAPI::JobIdWrapper job_id_wrapper_;
+      CreamAPI::JobDescriptionWrapper * job_description_wrapper_;
      
 
     public:

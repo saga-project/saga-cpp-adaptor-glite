@@ -1,4 +1,4 @@
-//  Copyright (c) 2009 Ole Weidner (oweidner@cct.lsu.edu)
+//  Copyright (c) 2009-2010 Ole Weidner (oweidner@cct.lsu.edu)
 // 
 //  Distributed under the Boost Software License, Version 1.0. (See accompanying 
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -76,7 +76,7 @@ namespace glite_cream_job
         if(!get_batchsystem_and_queue_from_url(batchsystem, queue, data->rm_))
         {
             SAGA_OSSTREAM strm;
-            strm << "Batchsystem and queue name need to be encoded in the url path: " 
+            strm << "For job submission, batchsystem and queue name need to be encoded in the url path: " 
                  << "cream://<host>[:<port>]/cream-<batchsystem>-<queue-name>.";
             SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
         }
@@ -152,10 +152,11 @@ namespace glite_cream_job
       // create a unique random internal job id
       this->internal_jobid_ = saga::uuid().string();
       
-      CreamAPI::JobDescriptionWrapper jd(jdl, this->delegate_, leaseID, delegationProxy, autostart, internal_jobid_);
+      this->job_description_wrapper_ = new CreamAPI::JobDescriptionWrapper(jdl, 
+        this->delegate_, leaseID, delegationProxy, autostart, internal_jobid_);
       
       CreamAPI::AbsCreamProxy::RegisterArrayRequest reqs;
-      reqs.push_back( &jd );
+      reqs.push_back(this->job_description_wrapper_);
       CreamAPI::AbsCreamProxy::RegisterArrayResult resp;
       
       int connection_timeout = 30;
@@ -184,15 +185,16 @@ namespace glite_cream_job
       boost::tuple<bool, CreamAPI::JobIdWrapper, std::string> 
         registrationResponse = resp[this->internal_jobid_];
         
-      if(CreamAPI::JobIdWrapper::OK != registrationResponse.get<0>())
+      //if(CreamAPI::JobIdWrapper::OK != registrationResponse.get<0>())
+      if(CreamAPI::JobIdWrapper::OK != boost::get<0>(registrationResponse))
       {
         SAGA_ADAPTOR_THROW("Could not register job: "+registrationResponse.get<2>(), saga::NoSuccess);
         delete creamClient;
       }
       else
       {
-        std::string creamURL = registrationResponse.get<1>().getCreamURL();
-        std::string creamJID = registrationResponse.get<1>().getCreamJobID();
+        std::string creamURL = boost::get<1>(registrationResponse).getCreamURL();
+        std::string creamJID = boost::get<1>(registrationResponse).getCreamJobID();
         creamJID = creamURL + "/" + creamJID;
         
         update_state(saga::job::New);
@@ -208,20 +210,99 @@ namespace glite_cream_job
   }
 
 
+
+  //////////////////////////////////////////////////////////////////////////////
   // destructor
   job_cpi_impl::~job_cpi_impl (void)
   {
+    if(NULL != job_description_wrapper_)
+      delete job_description_wrapper_;
   }
 
 
+  //////////////////////////////////////////////////////////////////////////////
   //  SAGA API functions
   void job_cpi_impl::sync_get_state (saga::job::state & ret)
   {
-    // todo: implement active query!  
+    instance_data data(this);
+    
+    // get the current ('old') state
     saga::monitorable monitor (this->proxy_);
     saga::metric m (monitor.get_metric(saga::metrics::task_state));
-    ret = saga::adaptors::job_state_value_to_enum(m.get_attribute(saga::attributes::metric_value));
-
+    saga::job::state old_state = saga::adaptors::
+      job_state_value_to_enum(m.get_attribute(saga::attributes::metric_value));
+      
+    saga::job::state new_state = old_state;
+    
+    // get our jobid
+    saga::attribute attr (this->proxy_);
+    std::string jobid = attr.get_attribute(saga::job::attributes::jobid);
+    std::string creamJID(get_job_id_from_url(jobid));
+    
+    CreamAPI::JobIdWrapper job(creamJID, 
+                               saga_to_cream2_service_url(data->rm_.get_url()),
+                               std::vector<CreamAPI::JobPropertyWrapper>() );
+                               
+    std::vector<CreamAPI::JobIdWrapper> job_vector;
+    job_vector.push_back(job);
+    
+    std::string leaseID = "";
+    std::vector<std::string> status_vector;
+    
+    CreamAPI::JobFilterWrapper filter_wrapper(job_vector, status_vector, -1, -1,
+                                              this->delegate_, leaseID);
+                                              
+    CreamAPI::ResultWrapper result;
+    CreamAPI::AbsCreamProxy::StatusArrayResult status;
+    
+    CreamAPI::AbsCreamProxy* creamClient =  
+      CreamAPI::CreamProxyFactory::make_CreamProxyStatus(&filter_wrapper, &status, 30); // todo: timeout
+      
+    if(NULL == creamClient)
+    {
+      SAGA_ADAPTOR_THROW("Unexpected: creamClient pointer is NULL in sync_get_state().", saga::NoSuccess);
+    }
+    
+    try {
+      creamClient->setCredential(this->userproxy_);
+      creamClient->execute(saga_to_cream2_service_url(data->rm_.get_url()));
+      SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
+        std::cerr << DBG_PRFX << "Successfully registerd job with: " 
+                    << saga_to_cream2_service_url(data->rm_.get_url()) << std::endl; } 
+    }
+    catch(std::exception const & e)
+    {
+      SAGA_ADAPTOR_THROW("Could not query job status: "+e.what(), saga::NoSuccess);
+      delete creamClient;
+    } 
+    
+    //std::map<std::string, boost::tuple<CreamAPI::JobStatusWrapper::RESULT, CreamAPI::
+    //     JobStatusWrapper, std::string> >::const_iterator jobIt = status.begin();
+    CreamAPI::AbsCreamProxy::StatusArrayResult::const_iterator job_it = status.begin();
+  
+    while( job_it != status.end() ) 
+    {
+      if( job_it->second.get<0>() == CreamAPI::JobStatusWrapper::OK ) 
+      {
+        new_state = cream_to_saga_job_state(job_it->second.get<1>().getStatusName());
+        SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
+        std::cerr << DBG_PRFX << "Successfully querried job state for job id " << creamJID 
+                  << ": " << job_it->second.get<1>().getStatusName() << std::endl; } 
+        ++job_it;
+      }
+      else
+      {
+        SAGA_ADAPTOR_THROW("Could not query status for job id "+ creamJID 
+                           + "because: " + job_it->second.get<2>(), saga::NoSuccess);
+      }
+    }
+  
+    delete creamClient;
+  
+    if(old_state != new_state)
+      update_state(new_state);
+      
+    ret = new_state;
   }
 
   void job_cpi_impl::sync_get_description (saga::job::description & ret)
@@ -282,7 +363,7 @@ namespace glite_cream_job
   }
 
 
-  //////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   // inherited from the task interface
   void job_cpi_impl::sync_run (saga::impl::void_t & ret)
   {

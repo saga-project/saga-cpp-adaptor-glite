@@ -1,4 +1,4 @@
-//  Copyright (c) 2009 Ole Weidner (oweidner@cct.lsu.edu)
+//  Copyright (c) 2009-2010 Ole Weidner (oweidner@cct.lsu.edu)
 // 
 //  Distributed under the Boost Software License, Version 1.0. (See accompanying 
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -25,16 +25,13 @@ namespace glite_cream_job
 // returns true if scheme is supported, false otherwise
 bool can_handle_scheme(saga::url & url);
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // returns true if the hostname is valid, false otherwise
 bool can_handle_hostname(saga::url &url);
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // packs the delegate id and userproxy path into one string
 std::string pack_delegate_and_userproxy(std::string delegate, std::string userproxy);
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // unpacks the delegate id and userproxy path from a single string. returns
@@ -49,12 +46,19 @@ std::string saga_to_cream2_service_url(saga::url url);
 // converts a saga url to a gridsite delegation service address
 std::string saga_to_gridsite_delegation_service_url(saga::url url);
 
+////////////////////////////////////////////////////////////////////////////////
+// extracts the job id from a a give cream url (https://.../)
+std::string get_job_id_from_url(saga::url url);
 
 ////////////////////////////////////////////////////////////////////////////////
 // tries to extract batchsystem name and queue name from an url path. returns
 // true on success, false otherwise
 bool get_batchsystem_and_queue_from_url(std::string & batchsystem, 
                                         std::string & queue, const saga::url & url);
+
+////////////////////////////////////////////////////////////////////////////////
+// translates CREAM Job states to saga::job::states
+saga::job::state cream_to_saga_job_state(std::string cream_job_state);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
