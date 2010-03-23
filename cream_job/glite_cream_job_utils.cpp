@@ -118,7 +118,7 @@ std::string glite_cream_job::saga_to_cream2_service_url(saga::url url)
 
 ////////////////////////////////////////////////////////////////////////////////
 // 
-std::string glite_cream_job::get_job_id_from_url(saga::url url)
+/*std::string glite_cream_job::get_job_id_from_url(saga::url url)
 {
   std::string path(url.get_path());
 
@@ -136,7 +136,8 @@ std::string glite_cream_job::get_job_id_from_url(saga::url url)
     return strings.back();
   else
     return "";
-}
+}*/
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 saga::job::state glite_cream_job::cream_to_saga_job_state(std::string cream_job_state)
@@ -253,6 +254,75 @@ bool glite_cream_job::try_delegate_proxy(std::string serviceAddress,
   return true;   
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//
+bool glite_cream_job::start_job_has_failed(CreamAPI::ResultWrapper const & rw, 
+                                           std::string & jid, std::string & why)
+{
+  std::list< std::pair< JobIdWrapper, std::string > > target;
+  std::list< std::pair< JobIdWrapper, std::string > >::const_iterator c_it;
+  
+  // returns a list of job we tried to start but they where not present in the 
+  // CE CREAM
+  rw.getNotExistingJobs(target);
+  c_it = target.begin();   
+  while(c_it != target.end())
+  {
+    jid = c_it->first.getCreamJobID();
+    why = c_it->second;
+    return true;
+    c_it++;
+  }
+  
+  // returns the list of job that are not in no one of the states specified in 
+  // the statusVec
+  rw.getNotMatchingStatusJobs(target);
+  c_it = target.begin();   
+  while(c_it != target.end())
+  {
+    jid = c_it->first.getCreamJobID();
+    why = c_it->second;
+    return true;
+    c_it++;
+  }
+
+  // returns the list of job that are not in the timerange fromDate - toDate
+  rw.getNotMatchingDateJobs(target);
+  c_it = target.begin();   
+  while(c_it != target.end())
+  {
+    jid = c_it->first.getCreamJobID();
+    why = c_it->second;
+    return true;
+    c_it++;
+  }
+  
+  // returns the list of job that have not registered with the delegation
+  // identifier specified in the delegationID variable
+  rw.getNotMatchingProxyDelegationIdJobs(target);
+  c_it = target.begin();   
+  while(c_it != target.end())
+  {
+    jid = c_it->first.getCreamJobID();
+    why = c_it->second;
+    return true;
+    c_it++;
+  }
+  
+  // returns the list of job that have not registered with the lease identifier 
+  // specified in the leaseID variable (but the case it is empty)
+  rw.getNotMatchingLeaseIdJobs(target);
+  c_it = target.begin();   
+  while(c_it != target.end())
+  {
+    jid = c_it->first.getCreamJobID();
+    why = c_it->second;
+    return true;
+    c_it++;
+  }
+  
+  return false;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //

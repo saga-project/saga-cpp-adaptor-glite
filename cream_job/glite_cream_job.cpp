@@ -193,13 +193,15 @@ namespace glite_cream_job
       }
       else
       {
-        std::string creamURL = boost::get<1>(registrationResponse).getCreamURL();
-        std::string creamJID = boost::get<1>(registrationResponse).getCreamJobID();
-        creamJID = creamURL + "/" + creamJID;
+        this->cream_url_ = boost::get<1>(registrationResponse).getCreamURL();
+        this->cream_job_id_ = boost::get<1>(registrationResponse).getCreamJobID();
+        
+        saga::url saga_jobid(this->cream_url_);
+        saga_jobid.set_path("/"+this->cream_job_id_);
         
         update_state(saga::job::New);
         saga::adaptors::attribute attr (this);
-        attr.set_attribute (saga::job::attributes::jobid, creamJID);
+        attr.set_attribute (saga::job::attributes::jobid, saga_jobid.get_url());
 
         delete creamClient;
       }
@@ -237,9 +239,8 @@ namespace glite_cream_job
     // get our jobid
     saga::attribute attr (this->proxy_);
     std::string jobid = attr.get_attribute(saga::job::attributes::jobid);
-    std::string creamJID(get_job_id_from_url(jobid));
     
-    CreamAPI::JobIdWrapper job(creamJID, 
+    CreamAPI::JobIdWrapper job(this->cream_job_id_, 
                                saga_to_cream2_service_url(data->rm_.get_url()),
                                std::vector<CreamAPI::JobPropertyWrapper>() );
                                
@@ -266,9 +267,6 @@ namespace glite_cream_job
     try {
       creamClient->setCredential(this->userproxy_);
       creamClient->execute(saga_to_cream2_service_url(data->rm_.get_url()));
-      SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
-        std::cerr << DBG_PRFX << "Successfully registerd job with: " 
-                    << saga_to_cream2_service_url(data->rm_.get_url()) << std::endl; } 
     }
     catch(std::exception const & e)
     {
@@ -286,13 +284,13 @@ namespace glite_cream_job
       {
         new_state = cream_to_saga_job_state(job_it->second.get<1>().getStatusName());
         SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
-        std::cerr << DBG_PRFX << "Successfully querried job state for job id " << creamJID 
+        std::cerr << DBG_PRFX << "Successfully querried job state for job id " << this->cream_job_id_ 
                   << ": " << job_it->second.get<1>().getStatusName() << std::endl; } 
         ++job_it;
       }
       else
       {
-        SAGA_ADAPTOR_THROW("Could not query status for job id "+ creamJID 
+        SAGA_ADAPTOR_THROW("Could not query status for job id "+ this->cream_job_id_ 
                            + "because: " + job_it->second.get<2>(), saga::NoSuccess);
       }
     }
@@ -382,9 +380,11 @@ namespace glite_cream_job
     // the job already has an "official" id, since it has been registered with
     // the cream CE in the constructor.
     saga::attribute attr (this->proxy_);
-    std::string creamJID = attr.get_attribute(saga::job::attributes::jobid);
+    //std::string creamJID = attr.get_attribute(saga::job::attributes::jobid);
     
-    CreamAPI::JobIdWrapper job(creamJID, 
+    //std::cout << "starting: " << creamJID << std::endl;
+    
+    CreamAPI::JobIdWrapper job(this->cream_job_id_, 
                                saga_to_cream2_service_url(data->rm_.get_url()),
                                std::vector<CreamAPI::JobPropertyWrapper>() );
                                
@@ -410,15 +410,24 @@ namespace glite_cream_job
     try {
       creamClient->setCredential(this->userproxy_);
       creamClient->execute(saga_to_cream2_service_url(data->rm_.get_url()));
-      SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
-        std::cerr << DBG_PRFX << "Successfully registerd job with: " 
-                    << saga_to_cream2_service_url(data->rm_.get_url()) << std::endl; } 
     }
     catch(std::exception const & e)
     {
-      SAGA_ADAPTOR_THROW("Could not register job: "+e.what(), saga::NoSuccess);
+      SAGA_ADAPTOR_THROW("Could not start job: "+e.what(), saga::NoSuccess);
       delete creamClient;
     }  
+    
+    std::string error_message, jid;
+    if(start_job_has_failed(result, jid, error_message))
+    {
+      SAGA_ADAPTOR_THROW("Could not start job "+jid+": "+error_message, saga::NoSuccess);
+    }
+    else
+    {
+      SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_DEBUG) {
+        std::cerr << DBG_PRFX << "Successfully started job with: " 
+                  << saga_to_cream2_service_url(data->rm_.get_url()) << std::endl; } 
+    }
     
     delete creamClient;
     

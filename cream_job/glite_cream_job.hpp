@@ -47,11 +47,16 @@ namespace glite_cream_job
       typedef saga::adaptors::adaptor_data <adaptor> adaptor_data_type;
       
       void update_state(saga::job::state newstate);
-      
-      std::string delegate_;
 
-      std::string userproxy_;
       std::string internal_jobid_;
+            
+      std::string delegate_;
+      std::string userproxy_;
+      
+
+      
+      std::string cream_url_;
+      std::string cream_job_id_;
       
       CreamAPI::JobDescriptionWrapper * job_description_wrapper_;
      

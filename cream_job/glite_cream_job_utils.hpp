@@ -48,17 +48,21 @@ std::string saga_to_gridsite_delegation_service_url(saga::url url);
 
 ////////////////////////////////////////////////////////////////////////////////
 // extracts the job id from a a give cream url (https://.../)
-std::string get_job_id_from_url(saga::url url);
+//std::string get_job_id_from_url(saga::url url);
 
 ////////////////////////////////////////////////////////////////////////////////
 // tries to extract batchsystem name and queue name from an url path. returns
 // true on success, false otherwise
 bool get_batchsystem_and_queue_from_url(std::string & batchsystem, 
                                         std::string & queue, const saga::url & url);
-
 ////////////////////////////////////////////////////////////////////////////////
 // translates CREAM Job states to saga::job::states
 saga::job::state cream_to_saga_job_state(std::string cream_job_state);
+
+////////////////////////////////////////////////////////////////////////////////
+// returns true if 'rw' indicates an error. in this case 'why' will contain
+// the reason and jid the CREAM job id. returns false otherwise. 
+bool start_job_has_failed(CreamAPI::ResultWrapper const & rw, std::string & jid, std::string & why);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
