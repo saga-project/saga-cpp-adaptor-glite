@@ -42,6 +42,18 @@ namespace CreamAPI = glite::ce::cream_client_api::soap_proxy;
 namespace glite_cream_job
 {
 
+  std::string job_cpi_impl::get_job_id_priv_()
+  {
+    saga::adaptors::attribute attr (this);
+    return attr.get_attribute (saga::job::attributes::jobid);
+  }
+      
+  void job_cpi_impl::set_job_id_priv_(std::string jobid)
+  {
+      
+  }
+
+  ///////////////////////////////////////////////////////////////////////
   // constructor
   job_cpi_impl::job_cpi_impl (proxy                           * p, 
                               cpi_info const                  & info,
@@ -440,11 +452,18 @@ namespace glite_cream_job
   }
 
 
-  //  wait for the child process to terminate
+  /////////////////////////////////////////////////////////////////////
+  //
   void job_cpi_impl::sync_wait (bool   & ret, 
                                 double   timeout)
   {
-    SAGA_ADAPTOR_THROW ("Not Implemented", saga::NotImplemented);
+    saga::adaptors::attribute attr (this);
+    std::string job_id = attr.get_attribute (saga::job::attributes::jobid);
+    
+    double wait_count = 0.0;
+    saga::job::state s; 
+    ret = false;
+
   }
   
   

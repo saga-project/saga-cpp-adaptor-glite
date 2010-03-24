@@ -53,12 +53,13 @@ namespace glite_cream_job
       std::string delegate_;
       std::string userproxy_;
       
-
-      
       std::string cream_url_;
       std::string cream_job_id_;
       
       CreamAPI::JobDescriptionWrapper * job_description_wrapper_;
+      
+      std::string get_job_id_priv_();
+      void set_job_id_priv_(std::string jobid);
      
 
     public:
