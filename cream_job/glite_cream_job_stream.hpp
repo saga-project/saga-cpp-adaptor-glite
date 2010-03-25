@@ -29,7 +29,6 @@ namespace impl
         TR1::shared_ptr <saga::impl::v1_0::cpi> cpi_;
         TR1::shared_ptr <saga::impl::proxy>     proxy_;
 
-
       public:
         stream (saga::impl::v1_0::job_cpi * cpi, 
                 std::streambuf            * buf)

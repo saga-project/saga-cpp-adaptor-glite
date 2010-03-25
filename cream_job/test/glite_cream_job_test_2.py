@@ -27,6 +27,20 @@ try:
   cream_job.wait(-1.0) # wait for state change
   print "Job State : " + cream_job.get_state().name
     
+    
+  ## AND ANOTHER JOB - this should execute much faster,
+  ## since the proxy is already delegated.
+  cream_job_2 = js.create_job(jd)
+  cream_job_2.run()
+  
+  ## Ask the job object for its job ID
+  print "\nJob ID    : " + cream_job_2.get_job_id() + "\n"
+  
+  ## Wait until the job has reached "Done" state
+  print "Job State : " + cream_job_2.get_state().name
+  cream_job_2.wait(-1.0) # wait for state change
+  print "Job State : " + cream_job_2.get_state().name
+    
 except saga.exception, e:
   ## In case something went wrong
   print e.get_full_message() 

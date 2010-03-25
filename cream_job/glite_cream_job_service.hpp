@@ -42,12 +42,10 @@ namespace glite_cream_job
       // adaptor data
       typedef saga::adaptors::adaptor_data <adaptor> adaptor_data_type;
       
-      // delegation ID - for now unique per service instance. might change
-      // in the fututre.
+      // delegation ID - for now unique per service instance
       std::string delegation_;
       
-      // x.509 certificate for the delegation ID - for now coupled to a
-      // service instance
+      // x.509 certificate for the delegation ID 
       std::string userproxy_;
       
     public:

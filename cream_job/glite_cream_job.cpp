@@ -180,11 +180,7 @@ namespace glite_cream_job
       
       CreamAPI::AbsCreamProxy* creamClient = 
         CreamAPI::CreamProxyFactory::make_CreamProxyRegister(&reqs, &resp, connection_timeout);
-      
-      if(NULL == creamClient)
-      {
-        SAGA_ADAPTOR_THROW("Unexpected: creamClient pointer is NULL in job c'tor.", saga::NoSuccess);
-      }
+      THROW_IF_NULL(creamClient, "job c'tor");
 
       try {
         creamClient->setCredential(this->userproxy_);
@@ -226,8 +222,6 @@ namespace glite_cream_job
     } // init from jd
   
   }
-
-
 
   //////////////////////////////////////////////////////////////////////////////
   // destructor
@@ -274,11 +268,7 @@ namespace glite_cream_job
     
     CreamAPI::AbsCreamProxy* creamClient =  
       CreamAPI::CreamProxyFactory::make_CreamProxyStatus(&filter_wrapper, &status, 30); // todo: timeout
-      
-    if(NULL == creamClient)
-    {
-      SAGA_ADAPTOR_THROW("Unexpected: creamClient pointer is NULL in sync_get_state().", saga::NoSuccess);
-    }
+    THROW_IF_NULL(creamClient, "sync_get_state");
     
     try {
       creamClient->setCredential(this->userproxy_);
@@ -416,11 +406,7 @@ namespace glite_cream_job
     
     CreamAPI::AbsCreamProxy* creamClient =  
       CreamAPI::CreamProxyFactory::make_CreamProxyStart(&filter_wrapper, &result, 30); // todo: timeout
-      
-    if(NULL == creamClient)
-    {
-      SAGA_ADAPTOR_THROW("Unexpected: creamClient pointer is NULL in sync_run().", saga::NoSuccess);
-    }
+    THROW_IF_NULL(creamClient, "sync_run"); 
     
     try {
       creamClient->setCredential(this->userproxy_);

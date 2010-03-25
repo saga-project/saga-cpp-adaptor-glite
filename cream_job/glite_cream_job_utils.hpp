@@ -19,6 +19,10 @@ using namespace glite::ce::cream_client_api::util;
 #define DBG_PRFX     "gLite Cream Adaptor: "
 #define INTERNAL_SEP "[:::]"
 
+#define THROW_IF_NULL(ptr, mname) \
+          if(NULL == ptr)         \
+            SAGA_ADAPTOR_THROW("Unexpected: creamClient pointer is NULL in "+mname+"().", saga::NoSuccess); \
+
 namespace glite_cream_job
 {
 ////////////////////////////////////////////////////////////////////////////////

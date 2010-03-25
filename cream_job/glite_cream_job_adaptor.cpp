@@ -19,9 +19,9 @@
 
 SAGA_ADAPTOR_REGISTER (glite_cream_job::adaptor);
 
-////////////////////////////////////////////////////////////////////////
 namespace glite_cream_job
 {
+  //////////////////////////////////////////////////////////////////////////////
   // register function for the SAGA engine
   saga::impl::adaptor_selector::adaptor_info_list_type
     adaptor::adaptor_register (saga::impl::session * s)
@@ -46,7 +46,34 @@ namespace glite_cream_job
     // and return list
     return (list);
   }
+  
+  //////////////////////////////////////////////////////////////////////////////
+  //
+  bool adaptor::register_job(std::string job_id, std::string x509_cert,
+                             std::string delegation_name)
+  {
+    delegation_t del;
+    
+    del.first  = std::string(x509_cert);
+    del.second = std::string(delegation_name);
+    
+    std::pair<delegation_map_t::iterator, bool> p =
+        delegation_map_.insert(make_pair(job_id, del));
+        
+    return p.second;
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////
+  //
+  bool adaptor::unregister_job(std::string job_id)
+  { 
+    delegation_map_t::iterator it = delegation_map_.find(job_id);
+    if (it == delegation_map_.end())
+        return false;
+    
+    delegation_map_.erase(it);
+    return true; 
+  }
 
 } // namespace glite_cream_job
-////////////////////////////////////////////////////////////////////////
 

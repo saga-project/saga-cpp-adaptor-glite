@@ -42,12 +42,9 @@ namespace glite_cream_job
                                               saga::ini::ini const & glob_ini, 
                                               saga::ini::ini const & adap_ini,
                                               TR1::shared_ptr <saga::adaptor> adaptor)
-    : base_cpi (p, info, adaptor, cpi::Noflags)
+    : base_cpi (p, info, adaptor, cpi::Noflags), delegation_("")
   {
     instance_data data(this);
-    
-    // create a unique random delegation ID
-    delegation_ = saga::uuid().string();
     
     // check if we can handle scheme
     if (!data->rm_.get_url().empty())
@@ -66,16 +63,6 @@ namespace glite_cream_job
             strm << "Could not initialize job service for hostname: " << data->rm_ << ". ";
             SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
         }
-        
-        //std::string batchsystem, queue;
-        //if(!get_batchsystem_and_queue_from_url(batchsystem, queue, data->rm_))
-        //{
-        //    SAGA_OSSTREAM strm;
-        //    strm << "Batchsystem and queue name need to be encoded in the url path: " 
-        //         << "cream://<host>[:<port>]/cream-<batchsystem>-<queue-name>.";
-        //    SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::adaptors::AdaptorDeclined);
-        //}
-  
     }
     else
     {
@@ -91,6 +78,7 @@ namespace glite_cream_job
     // an authorization failed exception.
     std::vector <saga::context> contexts = p->get_session ().list_contexts ();
     std::vector <saga::context> context_list;
+    
     // holds a list of reasons why a context can't be used. if no context
     // can be used, the list will be appended to the exception message otherwise
     // it will be discarded. 
@@ -120,24 +108,6 @@ namespace glite_cream_job
       {
         std::string errorMessage = "";
         this->userproxy_ = context_list[i].get_attribute(saga::attributes::context_userproxy);
-          
-        bool success = try_delegate_proxy(saga_to_gridsite_delegation_service_url(data->rm_), 
-                                          this->delegation_, this->userproxy_, errorMessage);                                 
-        if(!success)
-        {
-          SAGA_OSSTREAM strm;
-          strm << "Could not delegate (id="<< delegation_ <<") userproxy " << this->userproxy_ << " to " 
-               << saga_to_gridsite_delegation_service_url(data->rm_) << ": " << errorMessage;
-          SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm),
-                             saga::AuthorizationFailed);
-        }
-        else
-        {          
-          SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
-            std::cerr << DBG_PRFX << "Successfully delegated userproxy " << this->userproxy_ 
-                      << " to " << saga_to_gridsite_delegation_service_url(data->rm_) 
-                      << " with id " << this->delegation_ << "." << std::endl; }
-        }
       } 
     }
     
@@ -168,6 +138,40 @@ namespace glite_cream_job
            << "The job description is missing the mandatory 'executable' attribute.";
 		  SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::BadParameter); 
     }
+    
+    /////////////////////////////
+    // DELEGATE PROXY
+    //
+    // delegate the x509 userproxy to the cream ce service if this is the first
+    // time either this object's create_job or get_job method is called.
+    // delegating is a VERY expensive operation and delegation is not required
+    // for any of the job::service methods, like list(), etc...
+    if(this->delegation_.length() < 1)
+    {    
+      // create a unique random delegation ID
+      std::string error_message("");
+      std::string del_id(saga::uuid().string());
+      
+      bool success = try_delegate_proxy(saga_to_gridsite_delegation_service_url(data->rm_), 
+                                        del_id, this->userproxy_, error_message);                                 
+      if(!success)
+      {
+        SAGA_OSSTREAM strm;
+        strm << "Could not delegate (id="<< this->delegation_ <<") userproxy " << this->userproxy_ << " to " 
+             << saga_to_gridsite_delegation_service_url(data->rm_) << ": " << error_message;
+        SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::AuthorizationFailed);
+      }
+      else
+      {          
+        this->delegation_ = del_id;
+        SAGA_VERBOSE(SAGA_VERBOSE_LEVEL_INFO) {
+        std::cerr << DBG_PRFX << "Successfully delegated userproxy " << this->userproxy_ 
+                  << " to " << saga_to_gridsite_delegation_service_url(data->rm_) 
+                  << " with id " << this->delegation_ << "." << std::endl; }
+      }
+    }   
+    // DELEGATE PROXY
+    /////////////////////////////
     
     // we're going to abuse the JobContact attribute to smuggle the 
     // delegation ID into the job instance.     
@@ -204,12 +208,8 @@ namespace glite_cream_job
     
     CreamAPI::AbsCreamProxy* creamClient =  
       CreamAPI::CreamProxyFactory::make_CreamProxyList(&jid_wrapper_v, 30); // todo: timeout
-      
-    if(NULL == creamClient)
-    {
-      SAGA_ADAPTOR_THROW("Unexpected: creamClient pointer is NULL in sync_list().", saga::NoSuccess);
-    }
-        
+    THROW_IF_NULL(creamClient, "sync_list");
+    
     try {
       creamClient->setCredential(this->userproxy_);
       creamClient->execute(saga_to_cream2_service_url(data->rm_.get_url()));

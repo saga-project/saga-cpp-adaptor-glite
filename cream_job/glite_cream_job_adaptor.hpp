@@ -17,7 +17,22 @@ namespace glite_cream_job
     typedef saga::impl::v1_0::op_info         op_info;  
     typedef saga::impl::v1_0::cpi_info        cpi_info;
     typedef saga::impl::v1_0::preference_type preference_type;
+    
+    ////////////////////////////////////////////////////////////////////
+    // 
+    typedef std::pair <std::string, std::string> delegation_t;
+    typedef std::map <std::string, delegation_t> delegation_map_t;
 
+    delegation_map_t delegation_map_;
+    
+    bool register_job(std::string job_id, std::string x509_cert,
+                      std::string delegation_name);
+                     
+    bool unregister_job(std::string job_id);
+    //
+    ////////////////////////////////////////////////////////////////////
+    
+    
     // This function registers the adaptor with the factory
     // @param factory the factory where the adaptor registers
     //        its maker function and description table
