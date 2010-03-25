@@ -42,15 +42,20 @@ namespace CreamAPI = glite::ce::cream_client_api::soap_proxy;
 namespace glite_cream_job
 {
 
+  ///////////////////////////////////////////////////////////////////////
+  //
   std::string job_cpi_impl::get_job_id_priv_()
   {
     saga::adaptors::attribute attr (this);
     return attr.get_attribute (saga::job::attributes::jobid);
   }
       
+  ///////////////////////////////////////////////////////////////////////
+  //
   void job_cpi_impl::set_job_id_priv_(std::string jobid)
   {
-      
+    saga::adaptors::attribute attr (this);
+    attr.set_attribute (saga::job::attributes::jobid, jobid);
   }
 
   ///////////////////////////////////////////////////////////////////////
@@ -65,7 +70,7 @@ namespace glite_cream_job
     instance_data data(this);
     
     // Inital job state is 'Unknown' since the job is not started yet.
-    update_state(saga::job::Unknown);
+    this->update_state_priv_(saga::job::Unknown);
     
     if (!data->rm_.get_url().empty())
     {
@@ -211,9 +216,8 @@ namespace glite_cream_job
         saga::url saga_jobid(this->cream_url_);
         saga_jobid.set_path("/"+this->cream_job_id_);
         
-        update_state(saga::job::New);
-        saga::adaptors::attribute attr (this);
-        attr.set_attribute (saga::job::attributes::jobid, saga_jobid.get_url());
+        this->update_state_priv_(saga::job::New);
+        this->set_job_id_priv_(saga_jobid.get_url());
 
         delete creamClient;
       }
@@ -310,7 +314,7 @@ namespace glite_cream_job
     delete creamClient;
   
     if(old_state != new_state)
-      update_state(new_state);
+      this->update_state_priv_(new_state);
       
     ret = new_state;
   }
@@ -322,8 +326,7 @@ namespace glite_cream_job
 
   void job_cpi_impl::sync_get_job_id (std::string & ret)
   {
-    saga::attribute attr (this->proxy_);
-    ret = attr.get_attribute(saga::job::attributes::jobid);
+    ret = this->get_job_id_priv_();
   }
 
   // access streams for communication with the child
@@ -456,20 +459,76 @@ namespace glite_cream_job
   //
   void job_cpi_impl::sync_wait (bool   & ret, 
                                 double   timeout)
-  {
-    saga::adaptors::attribute attr (this);
-    std::string job_id = attr.get_attribute (saga::job::attributes::jobid);
-    
+  {  
+    std::string job_id = this->get_job_id_priv_();
     double wait_count = 0.0;
-    saga::job::state s; 
     ret = false;
+   
+    try {
+      saga::job::state job_state; this->sync_get_state(job_state);
+    
+      if(job_state == saga::job::New ||
+         job_state == saga::job::Done ||
+         job_state == saga::job::Failed ||
+         job_state == saga::job::Canceled) 
+      {
+      
+        std::string state_name = saga::job::detail::get_state_name(job_state);
+        SAGA_OSSTREAM strm;
+        strm << "Could not wait for job " << job_id << ": " 
+             << "job is already in '" << state_name << "' state."; 
+        SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), saga::IncorrectState);   
+      }
+      
+      if(timeout < 0.0) 
+      {
+        saga::job::state s; this->sync_get_state(s);
+        while(s == saga::job::Running || s == saga::job::Suspended) 
+        {
+          this->sync_get_state(s);
+           sleep(1);
+        }
+        ret = true;
+      }
+          
+      else if(timeout > 0.0) 
+      {
+        while(wait_count <= timeout) 
+        {
+          saga::job::state s; this->sync_get_state(s);
+          if(s != saga::job::Running && s != saga::job::Suspended) 
+          {
+            ret = true;
+            break;
+          }
+          wait_count += 1.0; sleep(1); 
+        }
+      }
+      
+      else 
+      {
+        saga::job::state s; this->sync_get_state(s);
+        if(s != saga::job::Running) 
+        {
+          ret = true;
+        }
+      }
+    }
+    catch(saga::exception const & e)
+    {
+       //catch exceptions from other methods
+       SAGA_OSSTREAM strm;
+       strm << "Could not wait for job " << job_id << ": " 
+            << e.get_message();
+        SAGA_ADAPTOR_THROW(SAGA_OSSTREAM_GETSTRING(strm), e.get_error()); 
+    }
 
   }
   
   
   /////////////////////////////////////////////////////////////////////
   // utility functions, etc... 
-  void job_cpi_impl::update_state(saga::job::state newstate)
+  void job_cpi_impl::update_state_priv_(saga::job::state newstate)
   {
     saga::monitorable monitor (this->proxy_);
     saga::adaptors::metric m (monitor.get_metric(saga::metrics::task_state));

@@ -20,14 +20,14 @@ try:
   cream_job.run()
   
   ## Ask the job object for its job ID
-  print "Job ID    : " + cream_job.get_job_id() + "\n"
+  print "\nJob ID    : " + cream_job.get_job_id() + "\n"
   
   ## Wait until the job has reached "Done" state
-  while(cream_job.get_state() != saga.job.Done):
-    print "Job State : " + cream_job.get_state().name
-    time.sleep(1)
-
-except saga.exception, e:narcolepsynarcolepsy
+  print "Job State : " + cream_job.get_state().name
+  cream_job.wait(-1.0) # wait for state change
+  print "Job State : " + cream_job.get_state().name
+    
+except saga.exception, e:
   ## In case something went wrong
-  print e.get_full_message()[oweidner@localhost test]$ python glite_cream_job_test_2.py 
+  print e.get_full_message() 
 

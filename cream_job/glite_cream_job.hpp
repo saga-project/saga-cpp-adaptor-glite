@@ -45,8 +45,6 @@ namespace glite_cream_job
 
       // adaptor data
       typedef saga::adaptors::adaptor_data <adaptor> adaptor_data_type;
-      
-      void update_state(saga::job::state newstate);
 
       std::string internal_jobid_;
             
@@ -60,6 +58,8 @@ namespace glite_cream_job
       
       std::string get_job_id_priv_();
       void set_job_id_priv_(std::string jobid);
+      
+      void update_state_priv_(saga::job::state newstate);
      
 
     public:
