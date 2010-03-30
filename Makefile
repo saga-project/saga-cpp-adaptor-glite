@@ -4,14 +4,10 @@
 #  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt)
 
-ifndef SAGA_LOCATION
- $(error "SAGA_LOCATION must be set for this Makefile to work!")
-endif
+-include $(SAGA_LOCATION)/share/saga/make/saga.util.mk
 
 SAGA_SUBDIRS   = cream_job 
 
-#install::
-#	echo XX
-
-include $(SAGA_LOCATION)/share/saga/make/saga.mk
+-include $(SAGA_MAKE_INLCUDE_ROOT)/saga.mk
+-include $(SAGA_MAKE_INCLUDE_ROOT)/saga.dist.mk
 
