@@ -1,0 +1,21 @@
+
+PACKAGE:
+  saga-adaptors-glite
+
+DEPENDENCIES:
+  saga-core
+  glite
+
+DIRS:
+  cream_job/
+  project/
+
+FILES:
+  VERSION
+  PACKAGE
+  LICENSE
+  README
+  Makefile
+  configure
+  configure.in
+
