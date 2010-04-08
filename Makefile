@@ -4,10 +4,29 @@
 #  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt)
 
--include $(SAGA_LOCATION)/share/saga/make/saga.util.mk
+ifndef SAGA_LOCATION
+$(warning "")
+$(warning " ================================= ")
+$(warning "  you need to set SAGA_LOCATION    ")
+$(warning " ================================= ")
+$(warning "")
+$(error --)
+endif
 
-SAGA_SUBDIRS   = cream_job 
+include $(SAGA_LOCATION)/share/saga/make/saga.util.mk
 
--include $(SAGA_MAKE_INLCUDE_ROOT)/saga.mk
+SAGA_SUBDIRS = cream_job 
+
+# all:: config.summary
+# 
+# config.summary:
+# 	@$(ECHO) ""
+# 	@$(ECHO) " ================================= "
+# 	@$(ECHO) "  you need to run configure first  "
+# 	@$(ECHO) " ================================= "
+# 	@$(ECHO) ""
+# 	@$(FALSE)
+
+-include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.dist.mk
 
