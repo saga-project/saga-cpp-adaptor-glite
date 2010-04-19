@@ -14,6 +14,7 @@ FILES:
   PACKAGE
   LICENSE
   README
+  CHANGES
   Makefile
   configure
   configure.in
