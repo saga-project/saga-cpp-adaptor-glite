@@ -4,9 +4,7 @@
 #  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt)
 
-ifndef SAGA_LOCATION
- $(error "SAGA_LOCATION must be set for this Makefile to work!")
-endif
+-include ../config/make.cfg
 
 ifndef CREAM_CLIENT_API_C_LOCATION
  $(error "CREAM_CLIENT_API_C_LOCATION must be set for this Makefile to work!")
@@ -30,8 +28,6 @@ SAGA_ADAPTOR_OBJ  = $(SAGA_OBJ)
 
 SAGA_ADAPTOR_PACKAGES = job
 
-include $(SAGA_LOCATION)/share/saga/make/saga.adaptor.mk
-
 SAGA_CXXFLAGS += -I$(CREAM_CLIENT_API_C_LOCATION)/include/
 SAGA_CXXFLAGS += -I$(GSOAP_LOCATION)/include/
 SAGA_CXXFLAGS += -I$(LOG4CPP_LOCATION)/include/
@@ -40,3 +36,4 @@ SAGA_LDFLAGS  += -L$(CREAM_CLIENT_API_C_LOCATION)/lib64/ -lglite_ce_cream_client
 SAGA_LDFLAGS  += -L$(CREAM_CLIENT_API_C_LOCATION)/lib/ -lglite_security_gsoap_plugin_276b_gcc64dbgpthr
 SAGA_LDFLAGS  += -L$(LOG4CPP_LOCATION)/lib/ -llog4cpp
 
+include $(SAGA_LOCATION)/share/saga/make/saga.adaptor.mk
