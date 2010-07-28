@@ -8,9 +8,9 @@
 #
 #   Test for the GLITE libraries of a particular version (or newer)
 #
-#   If no path to the installed condor library is given,
-#   the macro searchs under /usr, /usr/local, /opt, /usr/condor,
-#   /usr/local/condor, /opt/condor, and /usr/local/package/condor-*
+#   If no path to the installed glite library is given,
+#   the macro searchs under /usr, /usr/local, /opt, /usr/glite,
+#   /usr/local/glite, /opt/glite, and /usr/local/package/glite-*
 #   GLITE_LOCATION and GLITE_CONFIG are evaluated, in that order.
 #
 #   This macro calls:
@@ -39,53 +39,53 @@
 
 AC_DEFUN([AX_SAGA_CHECK_GLITE],
 [
-  AC_ARG_VAR([GLITE_LOCATION],[condor installation directory])
-  AC_ARG_VAR([GLITE_CONFIG],[condor configuration file])
+  AC_ARG_VAR([GLITE_LOCATION],[glite installation directory])
+  AC_ARG_VAR([GLITE_CONFIG],[glite configuration file])
 
   SAGA_HAVE_GLITE=no
 
   tmp_location=""
-  AC_ARG_WITH([condor],
-              AS_HELP_STRING([--with-condor=DIR],
-              [use condor (default is YES) at DIR (optional)]),
+  AC_ARG_WITH([glite],
+              AS_HELP_STRING([--with-glite=DIR],
+              [use glite (default is YES) at DIR (optional)]),
               [
               if test "$withval" = "no"; then
-                want_condor="no"
+                want_glite="no"
               elif test "$withval" = "yes"; then
-                want_condor="yes"
+                want_glite="yes"
                 tmp_location=""
               else
-                want_condor="yes"
+                want_glite="yes"
                 tmp_location="$withval"
               fi
               ],
-              [want_condor="yes"])
+              [want_glite="yes"])
 
   # use GLITE_LOCATION and GLITE_CONFIG if avaialble, and if not 
-  # overwritten by --with-condor=<dir>
+  # overwritten by --with-glite=<dir>
 
   if test "x$GLITE_CONFIG" != "x"; then
-    condor_config_root=`expr $GLITE_CONFIG : '^\(.*\)/etc/condor_config$'`
+    glite=`expr $GLITE_CONFIG : '^\(.*\)/etc/glite$'`
   fi
 
-  if test "x$want_condor" = "xyes"; then
+  if test "x$want_glite" = "xyes"; then
     
-    packages=`ls /usr/local/package/condor-* 2>>/dev/null`
+    packages=`ls /usr/local/package/glite-* 2>>/dev/null`
 
-    if test "$tmp_location-$GLITE_LOCATION-$condor_config_root" = "--"; then
-      paths="/usr /usr/local /opt /sw $packages /usr/condor /usr/local/condor /opt/condor"
+    if test "$tmp_location-$GLITE_LOCATION-$glite" = "--"; then
+      paths="/usr /usr/local /opt /sw $packages /usr/glite /usr/local/glite /opt/glite"
     else
-      paths="$tmp_location $GLITE_LOCATION $condor_config_root"
+      paths="$tmp_location $GLITE_LOCATION $glite"
     fi
 
     for tmp_path in $paths; do
       
-      AC_MSG_CHECKING(for condor in $tmp_path)
+      AC_MSG_CHECKING(for glite in $tmp_path)
     
-      test -x $tmp_path/bin/condor_version && GLITE_BIN_VERSION=$tmp_path/bin/condor_version
-      test -x $tmp_path/bin/condor_q       && GLITE_BIN_Q=$tmp_path/bin/condor_q
-      test -x $tmp_path/bin/condor_submit  && GLITE_BIN_SUBMIT=$tmp_path/bin/condor_submit
-      test -x $tmp_path/bin/condor_rm      && GLITE_BIN_RM=$tmp_path/bin/condor_rm
+      test -x $tmp_path/bin/glite && GLITE_BIN_VERSION=$tmp_path/bin/glite
+      test -x $tmp_path/bin/glite       && GLITE_BIN_Q=$tmp_path/bin/glite
+      test -x $tmp_path/bin/glite  && GLITE_BIN_SUBMIT=$tmp_path/bin/glite
+      test -x $tmp_path/bin/glite      && GLITE_BIN_RM=$tmp_path/bin/glite
 
       if test "x$GLITE_BIN_VERSION" != "x"; then
         GLITE_VERSION=`$GLITE_BIN_VERSION | head -1 | cut -f 2 -d ' '`
@@ -99,7 +99,7 @@ AC_DEFUN([AX_SAGA_CHECK_GLITE],
               SAGA_HAVE_GLITE=yes
               GLITE_LOCATION=$tmp_path
               GLITE_PATH=$tmp_path/bin
-              GLITE_CONFIG=$tmp_path/etc/condor_config
+              GLITE_CONFIG=$tmp_path/etc/glite
               break;
             fi
           fi
@@ -110,12 +110,12 @@ AC_DEFUN([AX_SAGA_CHECK_GLITE],
 
     done # foreach path
 
-  fi # want_condor
+  fi # want_glite
 
 
   if  test "$SAGA_HAVE_GLITE" != "yes"; then
 
-    AC_MSG_WARN([no condor found])
+    AC_MSG_WARN([no glite found])
 
   else
 

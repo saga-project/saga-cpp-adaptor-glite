@@ -8,15 +8,24 @@
 # find saga.m4
 
 m4_include([saga.m4])
+m4_include([saga_glite_cream.m4])
 
 AC_INIT()
 
 AX_SAGA_CONFIG()
 
+AX_SAGA_CHECK_GLITE()
+
 # create output files
 AC_CONFIG_FILES([config/make.cfg])
 
 AC_OUTPUT()
+
+BUILD_ADAPTOR_JOB="no"
+
+if test "$SAGA_HAVE_ADAPTOR_JOB-$SAGA_HAVE_GLITE" = "yes-yes"; then
+  BUILD_ADAPTOR_JOB="yes"
+fi
 
 OUT=config.summary
 rm -f $OUT
@@ -28,6 +37,15 @@ echo " SAGA GLITE CREAM ADAPTOR - Configuration Summary                " >> $OUT
 echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT
 echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " >> $OUT
+echo "                                                                 " >> $OUT
+echo " gLite Found           : $SAGA_HAVE_GLITE                        " >> $OUT
+echo " gLite Version         : $GLITE_VERSION                          " >> $OUT
+echo " gLite Location        : $GLITE_LOCATION                         " >> $OUT
+echo " gLite Config          : $GLITE_CONFIG                           " >> $OUT
+echo " gLite Path            : $GLITE_PATH                             " >> $OUT
+echo "                                                                 " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Job Adaptor           : $BUILD_ADAPTOR_JOB                      " >> $OUT
 echo "                                                                 " >> $OUT
 echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT
