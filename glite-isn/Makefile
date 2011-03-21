@@ -42,7 +42,8 @@ SAGA_ADAPTOR_REQUIREMENTS = openssl
 
 # FIXME: needs configure tests
 SAGA_LDFLAGS  += -L../external/antlr/ -lsaga_antlr -lldap -L${XERCES_C_DIR}/lib -lxerces-c
-SAGA_CXXFLAGS += -I../external/                           -I${XERCES_C_DIR}/include 
+SAGA_CXXFLAGS += -I../external/                           -I${XERCES_C_DIR}/include  
+SAGA_CXXFLAGS += -DLDAP_DEPRECATED
 
 
 # needed?
@@ -50,7 +51,7 @@ SAGA_CXXFLAGS += -I../external/                           -I${XERCES_C_DIR}/incl
 #   SAGA_LDFLAGS   += -undefined dynamic_lookup
 # endif
 #
-# -DSIZE_T_DEFINED -DLDAP_DEPRECATED
+# -DSIZE_T_DEFINED 
 
 
 .PHONY: grammar
