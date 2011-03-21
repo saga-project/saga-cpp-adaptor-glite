@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+
+<!-- 
+Copyright (c) Members of the EGEE Collaboration. 2009-2010.
+See http://www.eu-egee.org/partners/ for details on the copyright
+holders.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ -->
+
+<root version="GLLUE-2.0">
+	<entity name="ComputingShare" ldapname="GLUE2ComputingShare">
+
+		<relatedEntity name="ComputingService" ldapname="GLUE2ComputingService">
+			<relationship primaryKey="GLUE2ComputingShareComputingServiceForeignKey"
+				secondaryKey="GLUE2ServiceID" directLookup="true" />
+		</relatedEntity>		
+		
+		<relatedEntity name="ComputingEndpoint" ldapname="GLUE2ComputingEndpoint">
+			<relationship primaryKey="GLUE2ComputingShareComputingEndpointForeignKey"
+				secondaryKey="GLUE2EndpointID" directLookup="true" />
+		</relatedEntity>	
+
+		<relatedEntity name="ExecutionEnvironment" ldapname="GLUE2ExecutionEnvironment">
+			<relationship primaryKey="GLUE2ComputingShareExecutionEnvironmentForeignKey"
+				secondaryKey="GLUE2ResourceID" directLookup="true" />
+		</relatedEntity>	
+		
+		<relatedEntity name="ComputingActivity" ldapname="GLUE2ComputingActivity">
+			<relationship primaryKey="GLUE2ComputingActivityComputingShareForeignKey"
+				secondaryKey="GLUE2ShareID" reverseLookup="true"
+				directLookup="true" />
+		</relatedEntity>
+		
+		<relatedEntity name="MappingPolicy" ldapname="GLUE2MappingPolicy">
+			<relationship primaryKey="GLUE2MappingPolicyShareForeignKey"
+				secondaryKey="GLUE2ShareID" reverseLookup="true"
+				directLookup="true" />
+		</relatedEntity>
+				
+		<!-- Inherited from Entity -->
+		<attribute name="CreationTime" type="DateTime_t"
+			ldapname="GLUE2EntityCreationTime" />
+		<attribute name="Name" type="string"
+			ldapname="GLUE2EntityName" />
+		<attribute name="Validity" type="UInt64"
+			ldapname="GLUE2EntityValidity" />
+		<attribute name="OtherInfo" type="string"
+			ldapname="GLUE2EntityOtherInfo" multivalued="true" />
+
+		<!-- Inherited from Share -->
+		<attribute name="ID" type="URI"
+			ldapname="GLUE2ShareID" />
+		<attribute name="Description" type="string"
+			ldapname="GLUE2ShareDescription" />
+		<attribute name="EndpointForeignKey" type="URI"
+			ldapname="GLUE2ShareEndpointForeignKey" multivalued="true" />
+		<attribute name="ResourceForeignKey" type="URI"
+			ldapname="GLUE2ShareResourceForeignKey" multivalued="true" />
+		<attribute name="ServiceForeignKey" type="URI"
+			ldapname="GLUE2ShareServiceForeignKey" />
+
+		<!-- Share -->
+		<attribute name="ServingState" type="ServingState_t"
+			ldapname="GLUE2ComputingShareServingState" />
+		<attribute name="MappingQueue" type="string"
+			ldapname="GLUE2ComputingShareMappingQueue" />
+		<attribute name="MaxWallTime" type="UInt32"
+			ldapname="GLUE2ComputingShareMaxWallTime" />
+		<attribute name="MaxMultiSlotWallTime" type="UInt32"
+			ldapname="GLUE2ComputingShareMaxMultiSlotWallTime" />
+		<attribute name="MinWallTime" type="UInt32"
+			ldapname="GLUE2ComputingShareMinWallTime" />
+		<attribute name="DefaultWallTime" type="UInt32"
+			ldapname="GLUE2ComputingShareDefaultWallTime" />
+		<attribute name="MaxCPUTime" type="UInt32"
+			ldapname="GLUE2ComputingShareMaxCPUTime" />
+		<attribute name="MaxTotalCPUTime" type="UInt32"
+			ldapname="GLUE2ComputingShareMaxTotalCPUTime" />
+		<attribute name="MinCPUTime" type="UInt32"
+			ldapname="GLUE2ComputingShareMinCPUTime" />
+		<attribute name="DefaultCPUTime" type="UInt32"
+			ldapname="GLUE2ComputingShareDefaultCPUTime" />
+		<attribute name="MaxTotalJobs" type="UInt32"
+			ldapname="GLUE2ComputingShareMaxTotalJobs" />
+		<attribute name="MaxRunningJobs" type="UInt32"
+			ldapname="GLUE2ComputingShareMaxRunningJobs" />
+		<attribute name="MaxWaitingJobs" type="UInt32"
+			ldapname="GLUE2ComputingShareMaxWaitingJobs" />
+		<attribute name="MaxPreLRMSWaitingJobs" type="UInt32"
+			ldapname="GLUE2ComputingShareMaxPreLRMSWaitingJobs" />
+		<attribute name="MaxUserRunningJobs" type="UInt32"
+			ldapname="GLUE2ComputingShareMaxUserRunningJobs" />
+		<attribute name="MaxSlotsPerJob" type="UInt32"
+			ldapname="GLUE2ComputingShareMaxSlotsPerJob" />
+		<attribute name="MaxStageInStreams" type="UInt32"
+			ldapname="GLUE2ComputingShareMaxStageInStreams" />
+		<attribute name="MaxStageOutStreams" type="UInt32"
+			ldapname="GLUE2ComputingShareMaxStageOutStreams" />
+		<attribute name="SchedulingPolicy" type="SchedulingPolicy_t"
+			ldapname="GLUE2ComputingShareSchedulingPolicy" />
+		<attribute name="MaxMainMemory" type="UInt64"
+			ldapname="GLUE2ComputingShareMaxMainMemory" />
+		<attribute name="GuaranteedMainMemory" type="UInt64"
+			ldapname="GLUE2ComputingShareGuaranteedMainMemory" />
+		<attribute name="MaxVirtualMemory" type="UInt64"
+			ldapname="GLUE2ComputingShareMaxVirtualMemory" />
+		<attribute name="GuaranteedVirtualMemory" type="UInt64"
+			ldapname="GLUE2ComputingShareGuaranteedVirtualMemory" />
+		<attribute name="MaxDiskSpace" type="UInt64"
+			ldapname="GLUE2ComputingShareMaxDiskSpace" />
+		<attribute name="DefaultStorageService" type="URI"
+			ldapname="GLUE2ComputingShareDefaultStorageService" />
+		<attribute name="Preemption" type="ExtendedBoolean_t"
+			ldapname="GLUE2ComputingSharePreemption" />
+		<attribute name="TotalJobs" type="UInt32"
+			ldapname="GLUE2ComputingShareTotalJobs" />
+		<attribute name="RunningJobs" type="UInt32"
+			ldapname="GLUE2ComputingShareRunningJobs" />
+		<attribute name="LocalRunningJobs" type="UInt32"
+			ldapname="GLUE2ComputingShareLocalRunningJobs" />
+		<attribute name="WaitingJobs" type="UInt32"
+			ldapname="GLUE2ComputingShareWaitingJobs" />
+		<attribute name="LocalWaitingJobs" type="UInt32"
+			ldapname="GLUE2ComputingShareLocalWaitingJobs" />
+		<attribute name="SuspendedJobs" type="UInt32"
+			ldapname="GLUE2ComputingShareSuspendedJobs" />
+		<attribute name="LocalSuspendedJobs" type="UInt32"
+			ldapname="GLUE2ComputingShareLocalSuspendedJobs" />
+		<attribute name="StagingJobs" type="UInt32"
+			ldapname="GLUE2ComputingShareStagingJobs" />
+		<attribute name="LocalStagingJobs" type="UInt32"
+			ldapname="GLUE2ComputingShareLocalStagingJobs" />
+		<attribute name="PreLRMSWaitingJobs" type="UInt32"
+			ldapname="GLUE2ComputingSharePreLRMSWaitingJobs" />
+		<attribute name="EstimatedAverageWaitingTime" type="UInt64"
+			ldapname="GLUE2ComputingShareEstimatedAverageWaitingTime" />
+		<attribute name="EstimatedWorstWaitingTime" type="UInt64"
+			ldapname="GLUE2ComputingShareEstimatedWorstWaitingTime" />
+		<attribute name="FreeSlots" type="UInt32"
+			ldapname="GLUE2ComputingShareFreeSlots" />
+		<attribute name="FreeSlotsWithDuration" type="string"
+			ldapname="GLUE2ComputingShareFreeSlotsWithDuration" />
+		<attribute name="UsedSlots" type="UInt32"
+			ldapname="GLUE2ComputingShareUsedSlots" />
+		<attribute name="RequestedSlots" type="UInt32"
+			ldapname="GLUE2ComputingShareRequestedSlots" />
+		<attribute name="ReservationPolicy" type="ReservationPolicy_t"
+			ldapname="GLUE2ComputingShareReservationPolicy" />
+		<attribute name="Tag" type="string"
+			ldapname="GLUE2ComputingShareTag" multivalued="true" />
+		<attribute name="ComputingServiceForeignKey" type="URI"
+			ldapname="GLUE2ComputingShareComputingServiceForeignKey" />
+		<attribute name="ComputingEndpointForeignKey" type="URI"
+			ldapname="GLUE2ComputingShareComputingEndpointForeignKey" multivalued="true" />
+		<attribute name="ExecutionEnvironmentForeignKey" type="URI"
+			ldapname="GLUE2ComputingShareExecutionEnvironmentForeignKey" multivalued="true" />
+
+	</entity>
+
+</root>

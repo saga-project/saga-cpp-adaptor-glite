@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+
+<!-- 
+Copyright (c) Members of the EGEE Collaboration. 2009-2010.
+See http://www.eu-egee.org/partners/ for details on the copyright
+holders.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ -->
+
+<root version="GLLUE-1.3">
+
+	<entity name="StorageArea" ldapname="GlueSA">
+
+		<relatedEntity name="StorageElement" ldapname="GlueSE">
+			<relationship primaryKey="GlueChunkKey"
+				secondaryKey="GlueSEUniqueID" />
+		</relatedEntity>
+		
+		<attribute name="LocalID" type="string"
+			ldapname="GlueSALocalID" />
+		<attribute name="Root" type="string" ldapname="GlueSARoot" />
+		<attribute name="Path" type="string" ldapname="GlueSAPath" />
+		<attribute name="Type" type="string" ldapname="GlueSAType" />
+		<attribute name="AccessControlBaseRule" type="string"
+			ldapname="GlueSAAccessControlBaseRule" multivalued="true" />
+		<attribute name="Name" type="string" ldapname="GlueSAName" />
+		<attribute name="TotalOnlineSize" type="int32"
+			ldapname="GlueSATotalOnlineSize" />
+		<attribute name="UsedOnlineSize" type="int32"
+			ldapname="GlueSAUsedOnlineSize" />
+		<attribute name="FreeOnlineSize" type="int32"
+			ldapname="GlueSAFreeOnlineSize" />
+		<attribute name="ReservedOnlineSize" type="int32"
+			ldapname="GlueSAReservedOnlineSize" />
+		<attribute name="TotalNearlineSize" type="int32"
+			ldapname="GlueSATotalNearlineSize" />
+		<attribute name="UsedNearlineSize" type="int32"
+			ldapname="GlueSAUsedNearlineSize" />
+		<attribute name="FreeNearlineSize" type="int32"
+			ldapname="GlueSAFreeNearlineSize" />
+		<attribute name="ReservedNearlineSize" type="int32"
+			ldapname="GlueSAReservedNearlineSize" />
+		<attribute name="RetentionPolicy" type="string"
+			ldapname="GlueSARetentionPolicy" />
+		<attribute name="AccessLatency" type="string"
+			ldapname="GlueSAAccessLatency" />
+		<attribute name="ExpirationMode" type="string"
+			ldapname="GlueSAExpirationMode" />
+		<attribute name="Capability" type="string"
+			ldapname="GlueSACapability" multivalued="true" />
+		<attribute name="Policy.Quota" type="int32"
+			ldapname="GlueSAPolicyQuota" />
+		<attribute name="Policy.MinFileSize" type="int32"
+			ldapname="GlueSAPolicyMinFileSize" />
+		<attribute name="Policy.MaxFileSize" type="int32"
+			ldapname="GlueSAPolicyMaxFileSize" />
+		<attribute name="Policy.MaxData" type="int32"
+			ldapname="GlueSAPolicyMaxData" />
+		<attribute name="Policy.MaxNumFiles" type="int32"
+			ldapname="GlueSAPolicyMaxNumFiles" />
+		<attribute name="Policy.MaxPinDuration" type="int32"
+			ldapname="GlueSAPolicyMaxPinDuration" />
+		<attribute name="Policy.FileLifeTime" type="string"
+			ldapname="GlueSAPolicyFileLifeTime" />
+		<attribute name="State.UsedSpace" type="int32"
+			ldapname="GlueSAStateUsedSpace" />
+		<attribute name="State.AvailableSpace" type="int32"
+			ldapname="GlueSAStateAvailableSpace" />
+		<attribute name="ChunkKey" type="string" ldapname="GlueChunkKey"
+			multivalued="true" />
+
+	</entity>
+
+</root>

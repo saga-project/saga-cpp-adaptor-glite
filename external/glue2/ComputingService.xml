@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+
+<!-- 
+Copyright (c) Members of the EGEE Collaboration. 2009-2010.
+See http://www.eu-egee.org/partners/ for details on the copyright
+holders.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ -->
+
+<root version="GLLUE-2.0">
+	<entity name="ComputingService" ldapname="GLUE2ComputingService">
+
+		<relatedEntity name="Service" ldapname="GLUE2Service">
+			<relationship primaryKey="GLUE2ServiceServiceForeignKey"
+				secondaryKey="GLUE2ServiceID" directLookup="true" />
+		</relatedEntity>
+
+		<relatedEntity name="AdminDomain" ldapname="GLUE2AdminDomain">
+			<relationship primaryKey="GLUE2ServiceAdminDomainForeignKey"
+				secondaryKey="GLUE2DomainID" directLookup="true" />
+		</relatedEntity>
+		
+		<relatedEntity name="Location" ldapname="GLUE2Location">
+			<relationship primaryKey="GLUE2LocationServiceForeignKey"
+				secondaryKey="GLUE2ServiceID" reverseLookup="true"
+				directLookup="true" />
+		</relatedEntity>
+		
+		<relatedEntity name="Contact" ldapname="GLUE2Contact">
+			<relationship primaryKey="GLUE2ContactServiceForeignKey"
+				secondaryKey="GLUE2ServiceID" reverseLookup="true"
+				directLookup="true" />
+		</relatedEntity>
+		
+		<relatedEntity name="ComputingEndpoint" ldapname="GLUE2ComputingEndpoint">
+			<relationship primaryKey="GLUE2ComputingEndpointComputingServiceForeignKey"
+				secondaryKey="GLUE2ServiceID" reverseLookup="true"
+				directLookup="true" />
+		</relatedEntity>
+		
+		<relatedEntity name="ComputingShare" ldapname="GLUE2ComputingShare">
+			<relationship primaryKey="GLUE2ComputingShareComputingServiceForeignKey"
+				secondaryKey="GLUE2ServiceID" reverseLookup="true"
+				directLookup="true" />
+		</relatedEntity>
+		
+		<relatedEntity name="ComputingManager" ldapname="GLUE2ComputingManager">
+			<relationship primaryKey="GLUE2ComputingManagerComputingServiceForeignKey"
+				secondaryKey="GLUE2ServiceID" reverseLookup="true"
+				directLookup="true" />
+		</relatedEntity>
+		
+		<relatedEntity name="ToStorageService" ldapname="GLUE2ToStorageService">
+			<relationship primaryKey="GLUE2ToStorageServiceComputingServiceForeignKey"
+				secondaryKey="GLUE2ServiceID" reverseLookup="true"
+				directLookup="true" />
+		</relatedEntity>
+											
+		<relatedEntity name="ToComputingService" ldapname="GLUE2ToComputingService">
+			<relationship primaryKey="GLUE2ToComputingServiceComputingServiceForeignKey"
+				secondaryKey="GLUE2ServiceID" reverseLookup="true"
+				directLookup="true" />
+		</relatedEntity>
+
+		<!-- Inherited from Entity -->
+		<attribute name="CreationTime" type="DateTime_t"
+			ldapname="GLUE2EntityCreationTime" />
+		<attribute name="Name" type="string"
+			ldapname="GLUE2EntityName" />
+		<attribute name="Validity" type="UInt64"
+			ldapname="GLUE2EntityValidity" />
+		<attribute name="OtherInfo" type="string"
+			ldapname="GLUE2EntityOtherInfo" multivalued="true" />
+					
+		<!-- Inherited from Service -->
+		<attribute name="ID" type="URI"
+			ldapname="GLUE2ServiceID" />
+		<attribute name="Capability" type="Capability_t"
+			ldapname="GLUE2ServiceCapability" multivalued="true" />
+		<attribute name="Complexity" type="string"
+			ldapname="GLUE2ServiceComplexity" />
+		<attribute name="QualityLevel" type="QualityLevel_t"
+			ldapname="GLUE2ServiceQualityLevel" />
+		<attribute name="StatusInfo" type="URL"
+			ldapname="GLUE2ServiceStatusInfo" multivalued="true" />
+		<attribute name="Type" type="ServiceType_t"
+			ldapname="GLUE2ServiceType" />
+		<attribute name="AdminDomainForeignKey" type="URI"
+			ldapname="GLUE2ServiceAdminDomainForeignKey" />
+		<attribute name="ServiceForeignKey" type="URI"
+			ldapname="GLUE2ServiceServiceForeignKey" multivalued="true" />
+			
+		<!-- ComputingService -->
+		<attribute name="TotalJobs" type="UInt32"
+			ldapname="GLUE2ComputingServiceTotalJobs" />
+		<attribute name="RunningJobs" type="UInt32"
+			ldapname="GLUE2ComputingServiceRunningJobs" />		
+		<attribute name="WaitingJobs" type="UInt32"
+			ldapname="GLUE2ComputingServiceWaitingJobs" />		
+		<attribute name="StagingJobs" type="UInt32"
+			ldapname="GLUE2ComputingServiceStagingJobs" />
+		<attribute name="SuspendedJobs" type="UInt32"
+			ldapname="GLUE2ComputingServiceSuspendedJobs" />		
+		<attribute name="PreLRMSWaitingJobs" type="UInt32"
+			ldapname="GLUE2ComputingServicePreLRMSWaitingJobs" />			
+	</entity>
+
+</root>

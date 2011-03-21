@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+
+<!-- 
+Copyright (c) Members of the EGEE Collaboration. 2009-2010.
+See http://www.eu-egee.org/partners/ for details on the copyright
+holders.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ -->
+
+<root version="GLLUE-2.0">
+	<entity name="ComputingManager" ldapname="GLUE2ComputingManager">
+		
+		<relatedEntity name="ComputingService" ldapname="GLUE2ComputingService">
+			<relationship primaryKey="GLUE2ComputingManagerComputingServiceForeignKey"
+				secondaryKey="GLUE2ServiceID" directLookup="true" />
+		</relatedEntity>
+		
+		<relatedEntity name="Benchmark" ldapname="GLUE2Benchmark">
+			<relationship primaryKey="ComputingManagerForeignKey"
+				secondaryKey="GLUE2ManagerID" reverseLookup="true"
+				directLookup="true" />
+		</relatedEntity>
+		
+		<relatedEntity name="ExecutionEnvironment" ldapname="GLUE2ExecutionEnvironment">
+			<relationship primaryKey="GLUE2ExecutionEnvironmentComputingManagerForeignKey"
+				secondaryKey="GLUE2ManagerID" reverseLookup="true"
+				directLookup="true" />
+		</relatedEntity>
+						
+		<relatedEntity name="ApplicationEnvironment" ldapname="GLUE2ApplicationEnvironment">
+			<relationship primaryKey="GLUE2ApplicationEnvironmentComputingManagerForeignKey"
+				secondaryKey="GLUE2ManagerID" reverseLookup="true"
+				directLookup="true" />
+		</relatedEntity>
+
+		<!-- Inherited from Entity -->
+		<attribute name="CreationTime" type="DateTime_t"
+			ldapname="GLUE2EntityCreationTime" />
+		<attribute name="Name" type="string"
+			ldapname="GLUE2EntityName" />
+		<attribute name="Validity" type="UInt64"
+			ldapname="GLUE2EntityValidity" />
+		<attribute name="OtherInfo" type="string"
+			ldapname="GLUE2EntityOtherInfo" multivalued="true" />
+
+		<!-- Inherited from Manager -->
+		<attribute name="ID" type="URI"
+			ldapname="GLUE2ManagerID" />
+		<attribute name="ProductName" type="string"
+			ldapname="GLUE2ManagerProductName" />
+		<attribute name="ProductVersion" type="string"
+			ldapname="GLUE2ManagerProductVersion" />
+		<attribute name="ServiceForeignKey" type="URI"
+			ldapname="GLUE2ManagerServiceForeignKey" />
+			
+		<!-- ComputingManager -->
+		<attribute name="Reservation" type="ExtendedBoolean_t"
+			ldapname="GLUE2ComputingManagerReservation" />				
+		<attribute name="BulkSubmission" type="ExtendedBoolean_t"
+			ldapname="GLUE2ComputingManagerBulkSubmission" />	
+		<attribute name="TotalPhysicalCPUs" type="UInt32"
+			ldapname="GLUE2ComputingManagerTotalPhysicalCPUs" />				
+		<attribute name="TotalLogicalCPUs" type="UInt32"
+			ldapname="GLUE2ComputingManagerTotalLogicalCPUs" />				
+		<attribute name="TotalSlots" type="UInt32"
+			ldapname="GLUE2ComputingManagerTotalSlots" />				
+		<attribute name="SlotsUsedByLocalJobs" type="UInt32"
+			ldapname="GLUE2ComputingManagerSlotsUsedByLocalJobs" />	
+		<attribute name="SlotsUsedByGridJobs" type="UInt32"
+			ldapname="GLUE2ComputingManagerSlotsUsedByGridJobs" />				
+		<attribute name="Homogeneous" type="ExtendedBoolean_t"
+			ldapname="GLUE2ComputingManagerHomogeneous" />	
+		<attribute name="NetworkInfo" type="NetworkInfo_t"
+			ldapname="GLUE2ComputingManagerNetworkInfo" multivalued="true" />				
+		<attribute name="LogicalCPUDistribution" type="string"
+			ldapname="GLUE2ComputingManagerLogicalCPUDistribution" />				
+		<attribute name="WorkingAreaShared" type="ExtendedBoolean_t"
+			ldapname="GLUE2ComputingManagerWorkingAreaShared" />				
+		<attribute name="WorkingAreaGuaranteed" type="ExtendedBoolean_t"
+			ldapname="GLUE2ComputingManagerWorkingAreaGuaranteed" />	
+		<attribute name="WorkingAreaTotal" type="UInt64"
+			ldapname="GLUE2ComputingManagerWorkingAreaTotal" />				
+		<attribute name="WorkingAreaFree" type="UInt64"
+			ldapname="GLUE2ComputingManagerWorkingAreaFree" />	
+		<attribute name="WorkingAreaLifeTime" type="UInt64"
+			ldapname="GLUE2ComputingManagerWorkingAreaLifeTime" />				
+		<attribute name="WorkingAreaMultiSlotTotal" type="UInt64"
+			ldapname="GLUE2ComputingManagerWorkingAreaMultiSlotTotal" />				
+		<attribute name="WorkingAreaMultiSlotFree" type="UInt64"
+			ldapname="GLUE2ComputingManagerWorkingAreaMultiSlotFree" />	
+		<attribute name="WorkingAreaMultiSlotLifeTime" type="UInt64"
+			ldapname="GLUE2ComputingManagerWorkingAreaMultiSlotLifeTime" />				
+		<attribute name="CacheTotal" type="UInt64"
+			ldapname="GLUE2ComputingManagerCacheTotal" />	
+		<attribute name="CacheFree" type="UInt64"
+			ldapname="GLUE2ComputingManagerCacheFree" />				
+		<attribute name="TmpDir" type="string"
+			ldapname="GLUE2ComputingManagerTmpDir" />				
+		<attribute name="ScratchDir" type="string"
+			ldapname="GLUE2ComputingManagerScratchDir" />				
+		<attribute name="ApplicationDir" type="string"
+			ldapname="GLUE2ComputingManagerApplicationDir" />						
+		<attribute name="ServiceForeignKey" type="URI"
+			ldapname="GLUE2ComputingManagerComputingServiceForeignKey" />
+			
+	</entity>
+
+</root>

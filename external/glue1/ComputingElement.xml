@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+
+<!-- 
+Copyright (c) Members of the EGEE Collaboration. 2009-2010.
+See http://www.eu-egee.org/partners/ for details on the copyright
+holders.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ -->
+
+<root version="GLLUE-1.3">
+
+	<entity name="ComputingElement" ldapname="GlueCE">
+
+		<relatedEntity name="Cluster" ldapname="GlueCluster">
+			<relationship primaryKey="GlueForeignKey"
+				secondaryKey="GlueClusterUniqueID" />
+		</relatedEntity>
+
+		<relatedEntity name="VOView" ldapname="GlueVOView">
+			<relationship primaryKey="GlueChunkKey"
+				secondaryKey="GlueCEUniqueID" reverseLookup="true" />
+		</relatedEntity>
+
+		<relatedEntity name="CESEBind" ldapname="GlueCESEBind">
+			<relationship primaryKey="GlueCESEBindCEUniqueID"
+				secondaryKey="GlueCEUniqueID" reverseLookup="true"
+				directLookup="true" />
+		</relatedEntity>
+
+		<attribute name="UniqueID" type="string"
+			ldapname="GlueCEUniqueID" />
+		<attribute name="Name" type="string" ldapname="GlueCEName" />
+		<attribute name="ImplementationName" type="CEImpl_t"
+			ldapname="GlueCEImplementationName" />
+		<attribute name="ImplementationVersion" type="string"
+			ldapname="GlueCEImplementationVersion" />
+		<attribute name="Capability" type="string"
+			ldapname="GlueCECapability" multivalued="true" />
+		<attribute name="InformationServiceURL" type="uri"
+			ldapname="GlueInformationServiceURL" />
+		<attribute name="LRMSType" type="lrms_t"
+			ldapname="GlueCEInfoLRMSType" />
+		<attribute name="LRMSVersion" type="string"
+			ldapname="GlueCEInfoLRMSVersion" />
+		<attribute name="GRAMVersion" type="string"
+			ldapname="GlueCEInfoGRAMVersion" />
+		<attribute name="HostName" type="string"
+			ldapname="GlueCEInfoHostName" />
+		<attribute name="GatekeeperPort" type="int32"
+			ldapname="GlueCEInfoGatekeeperPort" />
+		<attribute name="JobManager" type="string"
+			ldapname="GlueCEInfoJobManager" />
+		<attribute name="ContactString" type="string"
+			ldapname="GlueCEInfoContactString" multivalued="true" />
+		<attribute name="TotalCPUs" type="int32"
+			ldapname="GlueCEInfoTotalCPUs" />
+		<attribute name="ApplicationDir" type="string"
+			ldapname="GlueCEInfoApplicationDir" />
+		<attribute name="DataDir" type="string"
+			ldapname="GlueCEInfoDataDir" />
+		<attribute name="DefaultSE" type="string"
+			ldapname="GlueCEInfoDefaultSE" />
+		<attribute name="Status" type="cestatus_t"
+			ldapname="GlueCEStateStatus" />
+		<attribute name="RunningJobs" type="int32"
+			ldapname="GlueCEStateRunningJobs" />
+		<attribute name="WaitingJobs" type="int32"
+			ldapname="GlueCEStateWaitingJobs" />
+		<attribute name="TotalJobs" type="int32"
+			ldapname="GlueCEStateTotalJobs" />
+		<attribute name="EstimatedResponseTime" type="int32"
+			ldapname="GlueCEStateEstimatedResponseTime" />
+		<attribute name="WorstResponseTime" type="int32"
+			ldapname="GlueCEStateWorstResponseTime" />
+		<attribute name="FreeJobSlots" type="int32"
+			ldapname="GlueCEStateFreeJobSlots" />
+		<attribute name="FreeCPUs" type="int32"
+			ldapname="GlueCEStateFreeCPUs" />
+		<attribute name="MaxWallClockTime" type="int32"
+			ldapname="GlueCEPolicyMaxWallClockTime" />
+		<attribute name="MaxObtainableWallClockTime" type="int32"
+			ldapname="GlueCEPolicyMaxObtainableWallClockTime" />
+		<attribute name="MaxCPUTime" type="int32"
+			ldapname="GlueCEPolicyMaxCPUTime" />
+		<attribute name="MaxObtainableCPUTime" type="int32"
+			ldapname="GlueCEPolicyMaxObtainableCPUTime" />
+		<attribute name="MaxTotalJobs" type="int32"
+			ldapname="GlueCEPolicyMaxTotalJobs" />
+		<attribute name="MaxRunningJobs" type="int32"
+			ldapname="GlueCEPolicyMaxRunningJobs" />
+		<attribute name="MaxWaitingJobs" type="int32"
+			ldapname="GlueCEPolicyMaxWaitingJobs" />
+		<attribute name="Priority" type="int32"
+			ldapname="GlueCEPolicyPriority" />
+		<attribute name="AssignedJobSlots" type="int32"
+			ldapname="GlueCEPolicyAssignedJobSlots" />
+		<attribute name="MaxSlotsPerJob" type="int32"
+			ldapname="GlueCEPolicyMaxSlotsPerJob" />
+		<attribute name="Preemption" type="int32"
+			ldapname="GlueCEPolicyPreemption" />
+		<attribute name="AccessControlBaseRule" type="ACBR_t"
+			ldapname="GlueCEAccessControlBaseRule" />
+		<attribute name="ForeignKey" type="string"
+			ldapname="GlueForeignKey" multivalued="true" />
+
+	</entity>
+
+</root>

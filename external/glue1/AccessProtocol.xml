@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<!-- 
+Copyright (c) Members of the EGEE Collaboration. 2009-2010.
+See http://www.eu-egee.org/partners/ for details on the copyright
+holders.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ -->
+
+<root version="GLLUE-1.3">
+
+	<entity name="AccessProtocol" ldapname="GlueSEAccessProtocol">
+
+		<relatedEntity name="StorageElement" ldapname="GlueSE">
+			<relationship primaryKey="GlueChunkKey"
+				secondaryKey="GlueSEUniqueID" />
+		</relatedEntity>
+
+		<attribute name="LocalID" type="string"
+			ldapname="GlueSEAccessProtocolLocalID" />
+		<attribute name="Endpoint" type="uri"
+			ldapname="GlueSEAccessProtocolEndpoint" />
+		<attribute name="Type" type="accessProt_t"
+			ldapname="GlueSEAccessProtocolType" />
+		<attribute name="Version" type="string"
+			ldapname="GlueSEAccessProtocolVersion" />
+		<attribute name="Capability" type="string"
+			ldapname="GlueSEAccessProtocolCapability" multivalued="true" />
+		<attribute name="SupportedSecurity" type="string"
+			ldapname="GlueSEAccessProtocolSupportedSecurity" multivalued="true" />
+		<attribute name="Port" type="int"
+			ldapname="GlueSEAccessProtocolPort" />
+		<attribute name="MaxStreams" type="int32"
+			ldapname="GlueSEAccessProtocolMaxStreams" />
+		<attribute name="ChunkKey" type="string" ldapname="GlueChunkKey"
+			multivalued="true" />
+
+		<!-- This attribute does not appear to be published -->
+		<attribute name="AccessTime" type="int"
+			ldapname="GlueSEAccessProtocolAccessTime" />
+
+	</entity>
+
+</root>

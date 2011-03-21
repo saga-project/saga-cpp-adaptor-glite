@@ -1,0 +1,33 @@
+// $ANTLR 2.7.7 (2006-11-01): isn_grammar.g -> isnTokenTypes.txt$
+isn    // output token vocab name
+K_NULL="null"=4
+K_IS="is"=5
+K_IN="in"=6
+K_LIKE="like"=7
+K_ESCAPE="escape"=8
+K_NOT="not"=9
+K_AND="and"=10
+K_OR="or"=11
+K_ALL="all"=12
+K_ANY="any"=13
+K_STRING_LIST=14
+SVC_CMP=15
+DATA_CMP=16
+S_CHAR_LITERAL("char literal")=17
+LPAREN("left parenthesis")=18
+S_NUMBER("number")=19
+COMMA("comma")=20
+RPAREN("right parenthesis")=21
+K_VO=22
+NE("not equals")=23
+EQ("equals")=24
+LESS=25
+GT("greater than")=26
+LE=27
+GE=28
+S_IDENTIFIER("identifier")=29
+WS_("white space")=30
+DIGIT("digit")=31
+INTEGER("integer")=32
+FLOAT("float")=33
+LETTER("letter")=34

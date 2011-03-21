@@ -1,0 +1,47 @@
+// $ANTLR 2.7.7 (2006-11-01): sd_grammar.g -> sdTokenTypes.txt$
+sd    // output token vocab name
+K_NULL="null"=4
+K_IS="is"=5
+K_IN="in"=6
+K_LIKE="like"=7
+K_ESCAPE="escape"=8
+K_NOT="not"=9
+K_AND="and"=10
+K_OR="or"=11
+K_VO="vo"=12
+K_VOMS="voms"=13
+K_FQAN="fqan"=14
+K_DN="dn"=15
+K_TYPE="type"=16
+K_NAME="name"=17
+K_UID="uid"=18
+K_URI="url"=19
+K_ENDPOINT="endpoint"=20
+K_SITE="site"=21
+K_SERVICE="RelatedServices"=22
+K_INTERFACE_VERSION="InterfaceVersion"=23
+K_IMPLEMENTATION_VERSION="ImplementationVersion"=24
+K_IMPLEMENTOR="Implementor"=25
+K_CAPABILITY="capabilities"=26
+K_ALL="all"=27
+K_ANY="any"=28
+K_STRING_LIST=29
+SVC_CMP=30
+DATA_CMP=31
+S_IDENTIFIER("identifier")=32
+LPAREN("left parenthesis")=33
+RPAREN("right parenthesis")=34
+S_CHAR_LITERAL("string literal")=35
+S_NUMBER("number")=36
+COMMA("comma")=37
+NE("not equals")=38
+EQ("equals")=39
+LESS=40
+GT("greater than")=41
+LE=42
+GE=43
+WS_("white space")=44
+DIGIT("digit")=45
+INTEGER("integer")=46
+FLOAT("float")=47
+LETTER("letter")=48

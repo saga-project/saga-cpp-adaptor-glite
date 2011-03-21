@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+
+<!-- 
+Copyright (c) Members of the EGEE Collaboration. 2009-2010.
+See http://www.eu-egee.org/partners/ for details on the copyright
+holders.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ -->
+
+<root version="GLLUE-2.0">
+	<entity name="ApplicationEnvironment" ldapname="GLUE2ApplicationEnvironment">
+
+		<relatedEntity name="ExecutionEnvironment" ldapname="GLUE2ExecutionEnvironment">
+			<relationship primaryKey="GLUE2ApplicationEnvironmentExecutionEnvironmentForeignKey"
+				secondaryKey="GLUE2ResourceID" directLookup="true" />
+		</relatedEntity>
+
+		<relatedEntity name="ComputingManager" ldapname="GLUE2ComputingManager">
+			<relationship primaryKey="GLUE2ApplicationEnvironmentComputingManagerForeignKey"
+				secondaryKey="GLUE2ManagerID" directLookup="true" />
+		</relatedEntity>
+		
+		<relatedEntity name="ApplicationHandle" ldapname="GLUE2ApplicationHandle">
+			<relationship primaryKey="GLUE2ApplicationHandleApplicationEnvironmentForeignKey"
+				secondaryKey="GLUE2ApplicationEnvironmentID" reverseLookup="true"
+				directLookup="true" />
+		</relatedEntity>
+		
+		<!-- Inherited from Entity -->
+		<attribute name="CreationTime" type="DateTime_t"
+			ldapname="GLUE2EntityCreationTime" />
+		<attribute name="Name" type="string"
+			ldapname="GLUE2EntityName" />
+		<attribute name="Validity" type="UInt64"
+			ldapname="GLUE2EntityValidity" />
+		<attribute name="OtherInfo" type="string"
+			ldapname="GLUE2EntityOtherInfo" multivalued="true" />
+
+		<!-- ApplicationEnvironment -->
+		<attribute name="ID" type="URI"
+			ldapname="GLUE2ApplicationEnvironmentID" />
+		<attribute name="AppName" type="string"
+			ldapname="GLUE2ApplicationEnvironmentAppName" />
+		<attribute name="AppVersion" type="string"
+			ldapname="GLUE2ApplicationEnvironmentAppVersion" />	
+		<attribute name="Repository" type="URL"
+			ldapname="GLUE2ApplicationEnvironmentRepository" />	
+		<attribute name="State" type="AppEnvState_t"
+			ldapname="GLUE2ApplicationEnvironmentState" />
+		<attribute name="RemovalDate" type="DateTime_t"
+			ldapname="GLUE2ApplicationEnvironmentRemovalDate" />	
+		<attribute name="License" type="License_t"
+			ldapname="GLUE2ApplicationEnvironmentLicense" />				
+		<attribute name="Description" type="string"
+			ldapname="GLUE2ApplicationEnvironmentDescription" />
+		<attribute name="BestBenchmark" type="Benchmark_t"
+			ldapname="GLUE2ApplicationEnvironmentBestBenchmark" multivalued="true" />	
+		<attribute name="ParallelSupport" type="ParallelSupport_t"
+			ldapname="GLUE2ApplicationEnvironmentParallelSupport" />				
+		<attribute name="MaxSlots" type="UInt32"
+			ldapname="GLUE2ApplicationEnvironmentMaxSlots" />
+		<attribute name="MaxJobs" type="UInt32"
+			ldapname="GLUE2ApplicationEnvironmentMaxJobs" />	
+		<attribute name="MaxUserSeats" type="UInt32"
+			ldapname="GLUE2ApplicationEnvironmentMaxUserSeats" />	
+		<attribute name="FreeSlots" type="UInt32"
+			ldapname="GLUE2ApplicationEnvironmentFreeSlots" />
+		<attribute name="FreeJobs" type="UInt32"
+			ldapname="GLUE2ApplicationEnvironmentFreeJobs" />	
+		<attribute name="FreeUserSeats" type="UInt32"
+			ldapname="GLUE2ApplicationEnvironmentFreeUserSeats" />				
+		<attribute name="ExecutionEnvironmentForeignKey" type="URI"
+			ldapname="GLUE2ApplicationEnvironmentExecutionEnvironmentForeignKey" multivalued="true" />
+		<attribute name="ComputingManagerForeignKey" type="URI"
+			ldapname="GLUE2ApplicationEnvironmentComputingManagerForeignKey" />
+			
+	</entity>
+
+</root>

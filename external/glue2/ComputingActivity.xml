@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+
+<!-- 
+Copyright (c) Members of the EGEE Collaboration. 2009-2010.
+See http://www.eu-egee.org/partners/ for details on the copyright
+holders.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ -->
+
+<root version="GLLUE-2.0">
+	<entity name="ComputingActivity" ldapname="GLUE2ComputingActivity">
+	
+		<relatedEntity name="UserDomain" ldapname="GLUE2UserDomain">
+			<relationship primaryKey="GLUE2ActivityUserDomainForeignKey"
+				secondaryKey="GLUE2DomainID" directLookup="true" />
+		</relatedEntity>
+
+		<relatedEntity name="Activity" ldapname="GLUE2Activity">
+			<relationship primaryKey="GLUE2ActivityActivityForeignKey"
+				secondaryKey="GLUE2ActivityID" directLookup="true" />
+		</relatedEntity>
+						
+		<relatedEntity name="ComputingEndpoint" ldapname="GLUE2ComputingEndpoint">
+			<relationship primaryKey="GLUE2ComputingActivityComputingEndpointForeignKey"
+				secondaryKey="GLUE2EndpointID" directLookup="true" />
+		</relatedEntity>					
+						
+		<relatedEntity name="ComputingShare" ldapname="GLUE2ComputingShare">
+			<relationship primaryKey="GLUE2ComputingActivityComputingShareForeignKey"
+				secondaryKey="GLUE2ShareID" directLookup="true" />
+		</relatedEntity>
+
+		<relatedEntity name="ExecutionEnvironment" ldapname="GLUE2ExecutionEnvironment">
+			<relationship primaryKey="GLUE2ComputingActivityExecutionEnvironmentForeignKey"
+				secondaryKey="GLUE2ResourceID" directLookup="true" />
+		</relatedEntity>	
+						
+		<!-- Inherited from Entity -->
+		<attribute name="CreationTime" type="DateTime_t"
+			ldapname="GLUE2EntityCreationTime" />
+		<attribute name="Name" type="string"
+			ldapname="GLUE2EntityName" />
+		<attribute name="Validity" type="UInt64"
+			ldapname="GLUE2EntityValidity" />
+		<attribute name="OtherInfo" type="string"
+			ldapname="GLUE2EntityOtherInfo" multivalued="true" />
+
+		<!-- Inherited from Activity -->
+		<attribute name="ID" type="URI"
+			ldapname="GLUE2ActivityID" />
+		<attribute name="UserDomainForeignKey" type="URI"
+			ldapname="GLUE2ActivityUserDomainForeignKey" />
+		<attribute name="EndpointForeignKey" type="URI"
+			ldapname="GLUE2ActivityEndpointForeignKey" />
+		<attribute name="ShareForeignKey" type="URI"
+			ldapname="GLUE2ActivityShareForeignKey" />
+		<attribute name="ResourceForeignKey" type="URI"
+			ldapname="GLUE2ActivityResourceForeignKey" />			
+		<attribute name="ActivityForeignKey" type="URI"
+			ldapname="GLUE2ActivityActivityForeignKey" multivalued="true" />
+			
+		<!-- ComputingActivity -->
+		<attribute name="State" type="ComputingActivityState_t"
+			ldapname="GLUE2ComputingActivityState" multivalued="true" />				
+		<attribute name="Owner" type="string"
+			ldapname="GLUE2ComputingActivityOwner" />
+		<attribute name="Type" type="ComputingActivityType_t"
+			ldapname="GLUE2ComputingActivityType" />				
+		<attribute name="IDFromEndpoint" type="URI"
+			ldapname="GLUE2ComputingActivityIDFromEndpoint" />				
+		<attribute name="LocalIDFromManager" type="string"
+			ldapname="GLUE2ComputingActivityLocalIDFromManager" />				
+		<attribute name="JobDescription" type="JobDescription_t"
+			ldapname="GLUE2ComputingActivityJobDescription" />				
+		<attribute name="RestartState" type="ComputingActivityState_t"
+			ldapname="GLUE2ComputingActivityRestartState" multivalued="true" />				
+		<attribute name="ExitCode" type="Int32"
+			ldapname="GLUE2ComputingActivityExitCode" />				
+		<attribute name="ComputingManagerExitCode" type="string"
+			ldapname="GLUE2ComputingActivityComputingManagerExitCode" />				
+		<attribute name="Error" type="string"
+			ldapname="GLUE2ComputingActivityError" multivalued="true" />				
+		<attribute name="WaitingPosition" type="UInt32"
+			ldapname="GLUE2ComputingActivityWaitingPosition" />				
+		<attribute name="UserDomain" type="string"
+			ldapname="GLUE2ComputingActivityUserDomain" />
+		<attribute name="LocalOwner" type="string"
+			ldapname="GLUE2ComputingActivityLocalOwner" />				
+		<attribute name="RequestedTotalWallTime" type="UInt64"
+			ldapname="GLUE2ComputingActivityRequestedTotalWallTime" />				
+		<attribute name="RequestedTotalCPUTime" type="UInt64"
+			ldapname="GLUE2ComputingActivityRequestedTotalCPUTime" />				
+		<attribute name="RequestedSlots" type="UInt32"
+			ldapname="GLUE2ComputingActivityRequestedSlots" />				
+		<attribute name="RequestedApplicationEnvironment" type="string"
+			ldapname="GLUE2ComputingActivityRequestedApplicationEnvironment" multivalued="true" />				
+		<attribute name="StdIn" type="string"
+			ldapname="GLUE2ComputingActivityStdIn" />				
+		<attribute name="StdOut" type="string"
+			ldapname="GLUE2ComputingActivityStdOut" />				
+		<attribute name="StdErr" type="string"
+			ldapname="GLUE2ComputingActivityStdErr" />				
+		<attribute name="LogDir" type="string"
+			ldapname="GLUE2ComputingActivityLogDir" />				
+		<attribute name="ExecutionNode" type="string"
+			ldapname="GLUE2ComputingActivityExecutionNode" multivalued="true" />				
+		<attribute name="Queue" type="string"
+			ldapname="GLUE2ComputingActivityQueue" />				
+		<attribute name="UsedTotalWallTime" type="UInt64"
+			ldapname="GLUE2ComputingActivityUsedTotalWallTime" />			
+		<attribute name="UsedTotalCPUTime" type="UInt64"
+			ldapname="GLUE2ComputingActivityUsedTotalCPUTime" />				
+		<attribute name="UsedMainMemory" type="UInt64"
+			ldapname="GLUE2ComputingActivityUsedMainMemory" />				
+		<attribute name="SubmissionTime" type="DateTime_t"
+			ldapname="GLUE2ComputingActivitySubmissionTime" />				
+		<attribute name="ComputingManagerSubmissionTime" type="DateTime_t"
+			ldapname="GLUE2ComputingActivityComputingManagerSubmissionTime" />				
+		<attribute name="StartTime" type="DateTime_t"
+			ldapname="GLUE2ComputingActivityStartTime" />				
+		<attribute name="ComputingManagerEndTime" type="DateTime_t"
+			ldapname="GLUE2ComputingActivityComputingManagerEndTime" />				
+		<attribute name="EndTime" type="DateTime_t"
+			ldapname="GLUE2ComputingActivityEndTime" />				
+		<attribute name="WorkingAreaEraseTime" type="DateTime_t"
+			ldapname="GLUE2ComputingActivityWorkingAreaEraseTime" />				
+		<attribute name="ProxyExpirationTime" type="DateTime_t"
+			ldapname="GLUE2ComputingActivityProxyExpirationTime" />				
+		<attribute name="SubmissionHost" type="string"
+			ldapname="GLUE2ComputingActivitySubmissionHost" />				
+		<attribute name="SubmissionClientName" type="string"
+			ldapname="GLUE2ComputingActivitySubmissionClientName" />				
+		<attribute name="OtherMessages" type="string"
+			ldapname="GLUE2ComputingActivityOtherMessages" multivalued="true" />	
+		<attribute name="ComputingEndpointForeignKey" type="URI"
+			ldapname="GLUE2ComputingActivityComputingEndpointForeignKey" />				
+		<attribute name="ComputingShareForeignKey" type="URI"
+			ldapname="GLUE2ComputingActivityComputingShareForeignKey" />				
+		<attribute name="ExecutionEnvironmentForeignKey" type="URI"
+			ldapname="GLUE2ComputingActivityExecutionEnvironmentForeignKey" />				
+
+	</entity>
+
+</root>
