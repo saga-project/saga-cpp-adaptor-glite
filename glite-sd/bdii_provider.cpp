@@ -23,8 +23,6 @@
 
 #include <antlr/AST.hpp>
 
-#define LDAP_DEPRECATED 1
-
 #include <ldap.h>
 #include <lber.h>
 #include <sys/time.h>

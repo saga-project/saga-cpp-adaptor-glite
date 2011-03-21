@@ -19,8 +19,6 @@
 
 #define INC_BDII_PROVIDER
 
-#define LDAP_DEPRECATED 1
-
 #define ATTR_NOT_SET "Not Set"
 #define ATTR_UID  "GlueServiceUniqueID"
 #define ATTR_UID_2  "GLUE2ServiceID"
