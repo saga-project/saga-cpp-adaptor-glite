@@ -33,7 +33,7 @@
 #include <saga/adaptors/task.hpp>
 #include <saga/adaptors/attribute.hpp>
 
-#include <saga/packages/sd/service_description.hpp>
+#include <saga/packages/sd/adaptors/service_description.hpp>
 
 #include <impl/packages/sd/info_provider.hpp>
 #include "sd_bdii_query.hpp"
@@ -926,7 +926,7 @@ namespace glite_sd_adaptor {
       selectService = false;
 
       if ( (dn = ldap_get_dn( ld, e )) != NULL ) {
-    saga::sd::service_description local_svc(server_url);
+    saga::adaptors::service_description local_svc(server_url);
     set_scalar_attribute(&local_svc, e, ATTR_URL);
     set_scalar_attribute(&local_svc, e, ATTR_UID);
     set_scalar_attribute(&local_svc, e, ATTR_IMPL_VERSION);
@@ -1220,7 +1220,7 @@ namespace glite_sd_adaptor {
     }
 
     for ( e = ldap_first_entry(ld, searchResult); e != NULL; e = ldap_next_entry(ld, e)) {
-      saga::sd::service_description local_svc(server_url);
+      saga::adaptors::service_description local_svc(server_url);
       selectService = false;
 
       // Get service endpoint
