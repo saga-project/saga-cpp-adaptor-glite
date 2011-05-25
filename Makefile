@@ -6,16 +6,24 @@
 
 -include config/make.cfg
 
-SAGA_SUBDIRS += cream_job
+SAGA_SUBDIRS = config external
 
-ifeq "x$(SAGA_BUILD_ADAPTOR_JOB)" "xyes"
+ifeq "x$(BUILD_ADAPTOR_JOB)" "xyes"
+  $(warning $(BUILD_ADAPTOR_JOB))
   SAGA_SUBDIRS += cream_job
 endif
 
+ifeq "x$(BUILD_ADAPTOR_SD)" "xyes"
+  SAGA_SUBDIRS += glite-sd
+endif
 
-all:: config.summary
+ifeq "x$(BUILD_ADAPTOR_ISN)" "xyes"
+  SAGA_SUBDIRS += glite-isn
+endif
 
-config.summary:
+all:: config/make.cfg
+
+config/make.cfg: 
 	@echo ""
 	@echo " ================================= "
 	@echo "  you need to run configure first  "
@@ -25,4 +33,4 @@ config.summary:
 
 
 -include $(SAGA_MAKE_INCLUDE_ROOT)/saga.mk
--include $(SAGA_LOCATION)/share/saga/make/saga.dist.mk
+

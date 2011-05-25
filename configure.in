@@ -19,13 +19,24 @@ AX_SAGA_CHECK_GLITE()
 # create output files
 AC_CONFIG_FILES([config/make.cfg])
 
-AC_OUTPUT()
+SAGA_CONFIGURE_OK=yes
+if ! test "$HAVE_SAGA" = "yes"; then SAGA_CONFIGURE_OK=no; fi
+AC_SUBST([SAGA_CONFIGURE_OK])
 
 BUILD_ADAPTOR_JOB="no"
+BUILD_ADAPTOR_SD=$SAGA_HAVE_ADAPTOR_SD
+BUILD_ADAPTOR_ISN=$SAGA_HAVE_ADAPTOR_ISN
 
 if test "$SAGA_HAVE_ADAPTOR_JOB-$SAGA_HAVE_GLITE" = "yes-yes"; then
   BUILD_ADAPTOR_JOB="yes"
 fi
+
+AC_SUBST([BUILD_ADAPTOR_JOB])
+AC_SUBST([BUILD_ADAPTOR_SD])
+AC_SUBST([BUILD_ADAPTOR_ISN])
+
+AC_OUTPUT()
+
 
 OUT=config.summary
 rm -f $OUT
@@ -36,7 +47,8 @@ echo " ========================================================        " >> $OUT
 echo " SAGA GLITE CREAM ADAPTOR - Configuration Summary                " >> $OUT
 echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT
-echo " Using SAGA from       : $TMP_SAGA_LOCATION ($TMP_SAGA_INSTTYPE) " >> $OUT
+echo " Using SAGA from       : $SAGA_LOCATION                          " >> $OUT
+echo "       SAGA version    : $SAGA_VERSION                           " >> $OUT
 echo "                                                                 " >> $OUT
 echo " gLite Found           : $SAGA_HAVE_GLITE                        " >> $OUT
 echo " gLite Version         : $GLITE_VERSION                          " >> $OUT
@@ -46,6 +58,8 @@ echo " gLite Path            : $GLITE_PATH                             " >> $OUT
 echo "                                                                 " >> $OUT
 echo "                                                                 " >> $OUT
 echo " Job Adaptor           : $BUILD_ADAPTOR_JOB                      " >> $OUT
+echo " SD  Adaptor           : $BUILD_ADAPTOR_SD                       " >> $OUT
+echo " ISN Adaptor           : $BUILD_ADAPTOR_ISN                      " >> $OUT
 echo "                                                                 " >> $OUT
 echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT
