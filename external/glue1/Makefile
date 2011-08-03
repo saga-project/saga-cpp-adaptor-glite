@@ -6,7 +6,7 @@
 
 
 SAGA_XML        = $(wildcard *.xml)
-SAGA_XML_DIR    = share/saga/schema/glue1/
+SAGA_XML_DIR    = $(SAGA_DAT_ROOT)/schema/glue1/
 
 INSTALL         = $(SAGA_LOCATION)/bin/saga-install.pl
 
