@@ -8,8 +8,11 @@ DEPENDENCIES:
 
 DIRS:
   config/
+  external/
   cream_job/
   project/
+  glite-isn/
+  glite-sd/
 
 FILES:
   PACKAGE
