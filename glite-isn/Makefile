@@ -40,10 +40,14 @@ SAGA_ADAPTOR_INI          = glite_isn_adaptor.ini
 
 SAGA_ADAPTOR_REQUIREMENTS = openssl
 
-# FIXME: needs configure tests
-SAGA_LDFLAGS  += -L../external/antlr/ -lsaga_antlr -lldap -L${XERCES_C_DIR}/lib -lxerces-c
-SAGA_CXXFLAGS += -I../external/                           -I${XERCES_C_DIR}/include  
-SAGA_CXXFLAGS += -DLDAP_DEPRECATED
+SAGA_CXXFLAGS += $(SAGA_LDAP_CPPFLAGS) -DLDAP_DEPRECATED
+SAGA_LDFLAGS  += $(SAGA_LDAP_LDFLAGS)
+
+SAGA_CXXFLAGS += $(SAGA_XERCESC_CPPFLAGS)
+SAGA_LDFLAGS  += $(SAGA_XERCESC_LDFLAGS)
+
+SAGA_LDFLAGS  += -L../external/antlr/ -lsaga_antlr
+SAGA_CXXFLAGS += -I../external/
 
 
 # needed?

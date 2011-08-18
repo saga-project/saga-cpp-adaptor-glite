@@ -2,28 +2,24 @@
 #
 # SYNOPSIS
 #
-#   AX_SAGA_CHECK_GLITE([MINIMUM-VERSION])
+#   AX_SAGA_CHECK_XERCESC([MINIMUM-VERSION])
 #
 # DESCRIPTION
 #
-#   Test for the GLITE libraries of a particular version (or newer)
+#   Test for the XERCESC libraries of a particular version (or newer)
 #
-#   If no path to the installed glite library is given,
-#   the macro searchs under /usr, /usr/local, /opt, /usr/glite,
-#   /usr/local/glite, /opt/glite, and /usr/local/package/glite-*
-#   GLITE_LOCATION and GLITE_CONFIG are evaluated, in that order.
+#   If no path to the installed xerces-c library is given,
+#   the macro searchs under /usr, /usr/local, /opt, /usr/xerces-c,
+#   /usr/local/xerces-c, /opt/xerces-c, and /usr/local/package/xerces-c-*
+#   XERCESC_LOCATION are evaluated, in that order.
 #
 #   This macro calls:
 #
-#     AC_SUBST(SAGA_HAVE_GLITE)
-#     AC_SUBST(GLITE_LOCATION)
-#     AC_SUBST(GLITE_VERSION) 
-#     AC_SUBST(GLITE_CONFIG) 
-#     AC_SUBST(GLITE_PATH) 
-#     AC_SUBST(GLITE_BIN_VERSION) 
-#     AC_SUBST(GLITE_BIN_Q) 
-#     AC_SUBST(GLITE_BIN_SUBMIT) 
-#     AC_SUBST(GLITE_BIN_RM) 
+#     AC_SUBST(SAGA_HAVE_XERCESC)
+#     AC_SUBST(XERCESC_LOCATION)
+#     AC_SUBST(XERCESC_VERSION) 
+#     AC_SUBST(XERCESC_CPPFLAGS) 
+#     AC_SUBST(XERCESC_LDFLAGS) 
 #
 # LAST MODIFICATION
 #
@@ -37,106 +33,119 @@
 #   modification, are permitted in any medium without royalty provided
 #   the copyright notice and this notice are preserved.
 
-AC_DEFUN([AX_SAGA_CHECK_GLITE],
+AC_DEFUN([AX_SAGA_CHECK_XERCESC],
 [
-  AC_ARG_VAR([GLITE_LOCATION],[glite installation directory])
-  AC_ARG_VAR([GLITE_CONFIG],[glite configuration file])
+  AC_ARG_VAR([XERCESC_LOCATION],[xerces-c installation directory])
 
-  SAGA_HAVE_GLITE=no
+  SAGA_HAVE_XERCESC=no
 
   tmp_location=""
-  AC_ARG_WITH([glite],
-              AS_HELP_STRING([--with-glite=DIR],
-              [use glite (default is YES) at DIR (optional)]),
+  AC_ARG_WITH([xercesc],
+              AS_HELP_STRING([--with-xercesc=DIR],
+              [use xercesc (default is YES) at DIR (optional)]),
               [
               if test "$withval" = "no"; then
-                want_glite="no"
+                want_xerces_c="no"
               elif test "$withval" = "yes"; then
-                want_glite="yes"
+                want_xerces_c="yes"
                 tmp_location=""
               else
-                want_glite="yes"
+                want_xerces_c="yes"
                 tmp_location="$withval"
               fi
               ],
-              [want_glite="yes"])
+              [want_xerces_c="yes"])
 
-  # use GLITE_LOCATION and GLITE_CONFIG if avaialble, and if not 
-  # overwritten by --with-glite=<dir>
+  # use XERCESC_LOCATION if avaialble, and if not 
+  # overwritten by --with-xercesc=<dir>
 
-  if test "x$GLITE_CONFIG" != "x"; then
-    glite=`expr $GLITE_CONFIG : '^\(.*\)/etc/glite$'`
-  fi
-
-  if test "x$want_glite" = "xyes"; then
+  if test "x$want_xerces_c" = "xyes"; then
     
-    packages=`ls /usr/local/package/glite-* 2>>/dev/null`
+    packages=`ls /usr/local/package/xerces-* 2>>/dev/null`
 
-    if test "$tmp_location-$GLITE_LOCATION-$glite" = "--"; then
-      paths="/usr /usr/local /opt /sw $packages /usr/glite /usr/local/glite /opt/glite"
+    if test "$tmp_location-$XERCESC_LOCATION-$xercesc" = "--"; then
+      paths="/usr /usr/local /opt /sw $packages /usr/xercesc /usr/local/xercesc /opt/xercesc"
     else
-      paths="$tmp_location $GLITE_LOCATION $glite"
+      paths="$tmp_location $XERCESC_LOCATION $xercesc"
     fi
 
     for tmp_path in $paths; do
       
-      AC_MSG_CHECKING(for glite in $tmp_path)
+      AC_MSG_CHECKING(for xercesc/util/PlatformUtils.hpp in $tmp_path/include)
     
-      test -x $tmp_path/bin/glite && GLITE_BIN_VERSION=$tmp_path/bin/glite
-      test -x $tmp_path/bin/glite       && GLITE_BIN_Q=$tmp_path/bin/glite
-      test -x $tmp_path/bin/glite  && GLITE_BIN_SUBMIT=$tmp_path/bin/glite
-      test -x $tmp_path/bin/glite      && GLITE_BIN_RM=$tmp_path/bin/glite
+      if test -e "$tmp_path/include/xercesc/util/PlatformUtils.hpp"; then
 
-      if test "x$GLITE_BIN_VERSION" != "x"; then
-        GLITE_VERSION=`$GLITE_BIN_VERSION | head -1 | cut -f 2 -d ' '`
-      fi
+        AC_MSG_RESULT(yes)
+        SAGA_HAVE_XERCESC=yes
+        XERCESC_LOCATION=$tmp_path
 
-      if test "x$GLITE_BIN_VERSION" != "x"; then
-        if test "x$GLITE_BIN_Q" != "x"; then
-          if test "x$GLITE_BIN_SUBMIT" != "x"; then
-            if test "x$GLITE_BIN_RM" != "x"; then
-              AC_MSG_RESULT(yes)
-              SAGA_HAVE_GLITE=yes
-              GLITE_LOCATION=$tmp_path
-              GLITE_PATH=$tmp_path/bin
-              GLITE_CONFIG=$tmp_path/etc/glite
-              break;
-            fi
-          fi
+        saved_ldflags=$LDFLAGS  
+        saved_cppflags=$CPPFLAGS 
+
+        XERCESC_LDFLAGS="-L$tmp_path/lib -lxerces-c"
+        XERCESC_CPPFLAGS="-I$tmp_path/include/"
+
+        CPPFLAGS="$CPPFLAGS $XERCESC_CPPFLAGS"
+        export CPPFLAGS
+
+        LDFLAGS="$LDFLAGS $XERCESC_LDFLAGS"
+        export LDFLAGS
+
+        AC_MSG_CHECKING(for libxerces-c in $tmp_path/lib)
+
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[@%:@include <xercesc/util/PlatformUtils.hpp>
+                                          #ifdef XERCES_CPP_NAMESPACE_USE
+                                           XERCES_CPP_NAMESPACE_USE
+                                          #endif]],
+                                        [[XMLPlatformUtils::Initialize();
+                                          return 0;
+                                        ]])],
+                                        link_xerces_c="yes",
+                                        link_xerces_c="no")
+              
+        if test "x$link_xerces_c" = "xno"; then
+        
+          AC_MSG_RESULT(no)
+
+          LDFLAGS=$saved_ldflags
+          CPPFLAGS=$saved_cppflags
+        
+        else
+
+
+          XERCESC_VERSION_MAJ=`grep " XERCES_VERSION_MAJOR "    $tmp_path/include/xercesc/util/XercesVersion.hpp | grep -e '^#define' | rev | cut -f 1 -d ' ' | rev`
+          XERCESC_VERSION_MIN=`grep " XERCES_VERSION_MINOR "    $tmp_path/include/xercesc/util/XercesVersion.hpp | grep -e '^#define' | rev | cut -f 1 -d ' ' | rev`
+          XERCESC_VERSION_SUB=`grep " XERCES_VERSION_REVISION " $tmp_path/include/xercesc/util/XercesVersion.hpp | grep -e '^#define' | rev | cut -f 1 -d ' ' | rev`
+
+          XERCESC_VERSION="$XERCESC_VERSION_MAJ.$XERCESC_VERSION_MIN.$XERCESC_VERSION_SUB"
+
+          AC_MSG_RESULT([yes ($XERCESC_VERSION)])
+
+          SAGA_XERCESC_DEP_FILES="$tmp_path/include/xercesc.h"
+          break;
         fi
       fi
+
 
       AC_MSG_RESULT(no)
 
     done # foreach path
 
-  fi # want_glite
+  fi # want_xerces_c
 
 
-  if  test "$SAGA_HAVE_GLITE" != "yes"; then
+  if  test "$SAGA_HAVE_XERCESC" != "yes"; then
 
-    AC_MSG_WARN([no glite found])
-
-  else
-
-    export GLITE_BIN_VERSION
-    export GLITE_BIN_Q
-    export GLITE_BIN_SUBMIT
-    export GLITE_BIN_RM
-
-    AC_SUBST(GLITE_BIN_VERSION)
-    AC_SUBST(GLITE_BIN_Q)
-    AC_SUBST(GLITE_BIN_SUBMIT)
-    AC_SUBST(GLITE_BIN_RM)
+    AC_MSG_WARN([no xerces-c found])
 
   fi
 
 
-  AC_SUBST(SAGA_HAVE_GLITE)
-  AC_SUBST(GLITE_LOCATION)
-  AC_SUBST(GLITE_VERSION)
-  AC_SUBST(GLITE_CONFIG)
-  AC_SUBST(GLITE_PATH)
+  AC_SUBST(SAGA_HAVE_XERCESC)
+  AC_SUBST(XERCESC_LOCATION)
+  AC_SUBST(XERCESC_CPPFLAGS)
+  AC_SUBST(XERCESC_LDFLAGS)
+  AC_SUBST(XERCESC_VERSION)
 
 ])
 

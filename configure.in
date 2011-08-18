@@ -9,6 +9,8 @@
 
 m4_include([saga.m4])
 m4_include([saga_glite_cream.m4])
+m4_include([saga_ldap.m4])
+m4_include([saga_xerces.m4])
 
 AC_INIT()
 
@@ -36,6 +38,8 @@ AC_ARG_ENABLE([adaptor-glite-isn],
               [enable_adaptor_glite_isn=yes])
 
 AX_SAGA_CHECK_GLITE()
+AX_SAGA_CHECK_LDAP()
+AX_SAGA_CHECK_XERCESC()
 
 # create output files
 AC_CONFIG_FILES([config/make.cfg])
@@ -52,11 +56,11 @@ if test "$enable_adaptor_cream_job-$SAGA_HAVE_PACKAGE_JOB-$SAGA_HAVE_GLITE" = "y
   BUILD_ADAPTOR_JOB="yes"
 fi
 
-if test "$enable_adaptor_glite_sd-$SAGA_HAVE_PACKAGE_SD-$SAGA_HAVE_XERCES" = "yes-yes-yes"; then
+if test "$enable_adaptor_glite_sd-$SAGA_HAVE_PACKAGE_SD-$SAGA_HAVE_LDAP-$SAGA_HAVE_XERCESC" = "yes-yes-yes-yes"; then
   BUILD_ADAPTOR_SD="yes"
 fi
 
-if test "$enable_adaptor_glite_isn-$SAGA_HAVE_PACKAGE_ISN-$SAGA_HAVE_XERCES" = "yes-yes-yes"; then
+if test "$enable_adaptor_glite_isn-$SAGA_HAVE_PACKAGE_ISN-$SAGA_HAVE_LDAP-$SAGA_HAVE_XERCESC" = "yes-yes-yes-yes"; then
   BUILD_ADAPTOR_ISN="yes"
 fi
 
@@ -85,9 +89,9 @@ echo " gLite Location        : $GLITE_LOCATION                         " >> $OUT
 echo " gLite Config          : $GLITE_CONFIG                           " >> $OUT
 echo " gLite Path            : $GLITE_PATH                             " >> $OUT
 echo "                                                                 " >> $OUT
-echo " Xerces-C Found        : $SAGA_HAVE_XERCES                       " >> $OUT
-echo " Xerces-C Version      : $XERCES_VERSION                         " >> $OUT
-echo " Xerces-C Location     : $XERCES_LOCATION                        " >> $OUT
+echo " Xerces-C Found        : $SAGA_HAVE_XERCESC                      " >> $OUT
+echo " Xerces-C Version      : $XERCESC_VERSION                        " >> $OUT
+echo " Xerces-C Location     : $XERCESC_LOCATION                       " >> $OUT
 echo "                                                                 " >> $OUT
 echo " LDAP Found            : $SAGA_HAVE_LDAP                         " >> $OUT
 echo " LDAP Version          : $LDAP_VERSION                           " >> $OUT
