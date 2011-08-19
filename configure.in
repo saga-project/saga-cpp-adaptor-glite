@@ -56,7 +56,7 @@ if test "$enable_adaptor_cream_job-$SAGA_HAVE_PACKAGE_JOB-$SAGA_HAVE_GLITE" = "y
   BUILD_ADAPTOR_JOB="yes"
 fi
 
-if test "$enable_adaptor_glite_sd-$SAGA_HAVE_PACKAGE_SD-$SAGA_HAVE_LDAP-$SAGA_HAVE_XERCESC" = "yes-yes-yes-yes"; then
+if test "$enable_adaptor_glite_sd-$SAGA_HAVE_PACKAGE_SD-$SAGA_HAVE_LDAP" = "yes-yes-yes"; then
   BUILD_ADAPTOR_SD="yes"
 fi
 
