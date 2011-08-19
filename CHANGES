@@ -1,13 +1,11 @@
-                       SAGA gLite CREAM Adaptor
-                 <http://saga.cct.lsu.edu/software/cpp>
+                            
+                            SAGA OGF Adaptors
+           <http://www.saga-project.org/download/adaptors/ogf/>
                            - Release Changelog -
 
-  Changes with SAGA gLite CREAM Adaptor Version 0.1.0          XX. April 2010
+  Changes with SAGA OGF Adaptors Version 1.0.0             01. September 2011
   ---------------------------------------------------------------------------
-
-  o Fist public source release. Basic CREAM functionality implemented. Still
-    missing is:
-    
-       * 
-       *
-       *
+  
+  o First release.
+  o Added INSTALL/CHANGES files.
+  
