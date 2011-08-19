@@ -598,6 +598,7 @@ SAGA_INC_DIR
 SAGA_CONF_DIR
 SAGA_MAKE_DIR
 HAVE_SAGA
+SAGA_PACKAGE_REVISION
 SAGA_PACKAGE_VERSION
 SAGA_VERSION_SUBMINOR
 SAGA_VERSION_MINOR
@@ -1937,11 +1938,15 @@ $as_echo "$SAGA_VERSION_MAJOR.$SAGA_VERSION_MINOR.$SAGA_VERSION_SUBMINOR" >&6; }
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga package version" >&5
 $as_echo_n "checking saga package version... " >&6; }
   SAGA_PACKAGE_VERSION=$SAGA_VERSION
-  test -f PACKAGE && SAGA_PACKAGE_VERSION=`grep -e '^VERSION:' PACKAGE | cut -f 2 -d ' '`
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_VERSION" >&5
-$as_echo "$SAGA_PACKAGE_VERSION" >&6; }
+  test -f PACKAGE && SAGA_PACKAGE_VERSION=` grep -e '^VERSION:'  PACKAGE | rev | cut -f 1 -d ' ' | rev`
+  test -f PACKAGE && SAGA_PACKAGE_REVISION=`grep -e '^REVISION:' PACKAGE | rev | cut -f 2 -d ' ' | rev`
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&5
+$as_echo "$SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&6; }
+
 
   export  SAGA_PACKAGE_VERSION
+
+  export  SAGA_PACKAGE_REVISION
 
 
 
@@ -4121,6 +4126,9 @@ echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT
 echo " Using SAGA from       : $SAGA_LOCATION                          " >> $OUT
 echo "       SAGA version    : $SAGA_VERSION                           " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Adaptor Version       : $SAGA_PACKAGE_VERSION                   " >> $OUT
+echo " Adaptor Revision      : $SAGA_PACKAGE_REVISION                  " >> $OUT
 echo "                                                                 " >> $OUT
 echo " gLite Found           : $SAGA_HAVE_GLITE                        " >> $OUT
 echo " gLite Version         : $GLITE_VERSION                          " >> $OUT
