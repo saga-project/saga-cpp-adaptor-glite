@@ -19,6 +19,8 @@
 #
 # Note that changes to headers will not trigger re-compilation.
 
+-include ../config/make.cfg
+
 GRAMMAR_FILE              = sd_grammar.g
 GRAMMAR_SRC               = sd_parser.cpp sd_lexer.cpp 
 GRAMMAR_HDR               = sd_parser.hpp sd_lexer.hpp sdTokenTypes.hpp 
@@ -35,21 +37,18 @@ SAGA_ADAPTOR_TYPE         = sd
 SAGA_ADAPTOR_NAME         = glite_sd
 SAGA_ADAPTOR_INI          = glite_sd_adaptor.ini
 
+SAGA_ADAPTOR_PACKAGES     = sd
+
 
 -include $(SAGA_LOCATION)/share/saga/make/saga.adaptor.mk
 
-SAGA_ADAPTOR_REQUIREMENTS = openssL
+SAGA_ADAPTOR_REQUIREMENTS = openssl
 
 SAGA_CXXFLAGS += $(SAGA_LDAP_CPPFLAGS) -DLDAP_DEPRECATED
 SAGA_LDFLAGS  += $(SAGA_LDAP_LDFLAGS)
 
-SAGA_CXXFLAGS += $(SAGA_XERCESC_CPPFLAGS)
-SAGA_LDFLAGS  += $(SAGA_XERCESC_LDFLAGS)
-
-
-SAGA_LDFLAGS  += -L../external/antlr/ -lsaga_antlr
 SAGA_CXXFLAGS += -I../external/
-
+SAGA_LDFLAGS  += -L../external/antlr/ -lsaga_antlr
 
 # needed?
 # ifeq "$(SAGA_OSTYPE)" "Darwin"

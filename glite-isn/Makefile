@@ -19,6 +19,8 @@
 #
 # Note that changes to headers will not trigger re-compilation.
 
+-include ../config/make.cfg
+
 GRAMMAR_FILE              = isn_grammar.g
 GRAMMAR_SRC               = isn_parser.cpp isn_lexer.cpp 
 GRAMMAR_HDR               = isn_parser.hpp isn_lexer.hpp isnTokenTypes.hpp 
@@ -35,6 +37,8 @@ SAGA_ADAPTOR_TYPE         = isn
 SAGA_ADAPTOR_NAME         = glite_isn
 SAGA_ADAPTOR_INI          = glite_isn_adaptor.ini
 
+SAGA_ADAPTOR_PACKAGES     = isn
+
 
 -include $(SAGA_LOCATION)/share/saga/make/saga.adaptor.mk
 
@@ -46,8 +50,8 @@ SAGA_LDFLAGS  += $(SAGA_LDAP_LDFLAGS)
 SAGA_CXXFLAGS += $(SAGA_XERCESC_CPPFLAGS)
 SAGA_LDFLAGS  += $(SAGA_XERCESC_LDFLAGS)
 
-SAGA_LDFLAGS  += -L../external/antlr/ -lsaga_antlr
 SAGA_CXXFLAGS += -I../external/
+SAGA_LDFLAGS  += -L../external/antlr/ -lsaga_antlr
 
 
 # needed?
