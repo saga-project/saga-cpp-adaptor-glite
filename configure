@@ -598,6 +598,7 @@ SAGA_INC_DIR
 SAGA_CONF_DIR
 SAGA_MAKE_DIR
 HAVE_SAGA
+SAGA_PACKAGE_REVISION
 SAGA_PACKAGE_VERSION
 SAGA_VERSION_SUBMINOR
 SAGA_VERSION_MINOR
@@ -1931,17 +1932,28 @@ $as_echo "$SAGA_VERSION_MAJOR.$SAGA_VERSION_MINOR.$SAGA_VERSION_SUBMINOR" >&6; }
   fi
 
 
-  # We set SAGA_LIB_VERSION to SAGA_VERSION by default.  If a local PACKAGE file is
+  # We set SAGA_PACKAGE_VERSION to SAGA_VERSION by default.  If a local PACKAGE file is
   # present though, for example for an adaptor, we use its version info instead.
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga package version" >&5
 $as_echo_n "checking saga package version... " >&6; }
   SAGA_PACKAGE_VERSION=$SAGA_VERSION
-  test -f PACKAGE && SAGA_PACKAGE_VERSION=`grep -e '^VERSION:' PACKAGE | cut -f 2 -d ' '`
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_VERSION" >&5
-$as_echo "$SAGA_PACKAGE_VERSION" >&6; }
+  test -f PACKAGE && SAGA_PACKAGE_VERSION=` grep -e '^VERSION:'  PACKAGE | sed -e 's/^.*\s\(\S*\)\s*/\1/'`
+  test -f PACKAGE && SAGA_PACKAGE_REVISION=`grep -e '^REVISION:' PACKAGE | sed -e 's/^.*$Revision:\s\(\S*\)\s.*$/\1/'`
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&5
+$as_echo "$SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&6; }
+
+  # svn info supercedes the revision info from the PACKAGE file
+  svnrevision=`svn info 2>&1 | grep Revision | cut -f 2 -d ' '`
+
+  if ! test "$svnrevision" = ""; then
+    SAGA_PACKAGE_REVISION=$svnrevision
+  fi
+
 
   export  SAGA_PACKAGE_VERSION
+
+  export  SAGA_PACKAGE_REVISION
 
 
 
@@ -2944,7 +2956,7 @@ if test "$enable_adaptor_cream_job-$SAGA_HAVE_PACKAGE_JOB-$SAGA_HAVE_GLITE" = "y
   BUILD_ADAPTOR_JOB="yes"
 fi
 
-if test "$enable_adaptor_glite_sd-$SAGA_HAVE_PACKAGE_SD-$SAGA_HAVE_LDAP-$SAGA_HAVE_XERCESC" = "yes-yes-yes-yes"; then
+if test "$enable_adaptor_glite_sd-$SAGA_HAVE_PACKAGE_SD-$SAGA_HAVE_LDAP" = "yes-yes-yes"; then
   BUILD_ADAPTOR_SD="yes"
 fi
 
@@ -4121,6 +4133,9 @@ echo " ========================================================        " >> $OUT
 echo "                                                                 " >> $OUT
 echo " Using SAGA from       : $SAGA_LOCATION                          " >> $OUT
 echo "       SAGA version    : $SAGA_VERSION                           " >> $OUT
+echo "                                                                 " >> $OUT
+echo " Adaptor Version       : $SAGA_PACKAGE_VERSION                   " >> $OUT
+echo " Adaptor Revision      : $SAGA_PACKAGE_REVISION                  " >> $OUT
 echo "                                                                 " >> $OUT
 echo " gLite Found           : $SAGA_HAVE_GLITE                        " >> $OUT
 echo " gLite Version         : $GLITE_VERSION                          " >> $OUT
