@@ -6,5 +6,6 @@
 
 SAGA_SUBDIRS = antlr glue1 glue2
 
+-include ../config/make.cfg
 -include $(SAGA_LOCATION)/share/saga/make/saga.mk
 
