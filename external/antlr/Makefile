@@ -4,7 +4,7 @@
 #  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt)
 
-# -include ../../config/make.cfg
+-include ../../config/make.cfg
 
 SAGA_ARC          = saga_antlr
 SAGA_SRC          = $(wildcard *.cpp)

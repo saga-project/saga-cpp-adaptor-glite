@@ -1909,9 +1909,9 @@ $as_echo "no" >&6; }
 $as_echo_n "checking saga version... " >&6; }
     SAGA_VERSION=`$SAGA_CONFIG --version`
 
-    SAGA_VERSION_MAJOR=`echo $SAGA_VERSION    | cut -f 1 -d . | cut -f 1 -d '-'`
-    SAGA_VERSION_MINOR=`echo $SAGA_VERSION    | cut -f 2 -d . | cut -f 1 -d '-'`
-    SAGA_VERSION_SUBMINOR=`echo $SAGA_VERSION | cut -f 3 -d . | cut -f 1 -d '-'`
+    SAGA_VERSION_MAJOR=`echo $SAGA_VERSION    | cut -sf 1 -d . | cut -sf 1 -d '-'`
+    SAGA_VERSION_MINOR=`echo $SAGA_VERSION    | cut -sf 2 -d . | cut -sf 1 -d '-'`
+    SAGA_VERSION_SUBMINOR=`echo $SAGA_VERSION | cut -sf 3 -d . | cut -sf 1 -d '-'`
 
     if test "$SAGA_VERSION_SUBMINOR" == ""; then
       SAGA_VERSION_SUBMINOR=0
@@ -1939,12 +1939,12 @@ $as_echo "$SAGA_VERSION_MAJOR.$SAGA_VERSION_MINOR.$SAGA_VERSION_SUBMINOR" >&6; }
 $as_echo_n "checking saga package version... " >&6; }
   SAGA_PACKAGE_VERSION=$SAGA_VERSION
   test -f PACKAGE && SAGA_PACKAGE_VERSION=` grep -e '^VERSION:'  PACKAGE | sed -e 's/^VERSION: *//'`
-  test -f PACKAGE && SAGA_PACKAGE_REVISION=`grep -e '^REVISION:' PACKAGE | cut -f 2 -d '$' | cut -f 2 -d ' '`
+  test -f PACKAGE && SAGA_PACKAGE_REVISION=`grep -e '^REVISION:' PACKAGE | cut -sf 2 -d '$' | cut -sf 2 -d ' '`
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&5
 $as_echo "$SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&6; }
 
   # svn info supercedes the revision info from the PACKAGE file
-  svnrevision=`svn info 2>&1 | grep Revision | cut -f 2 -d ' '`
+  svnrevision=`svn info 2>&1 | grep Revision | cut -sf 2 -d ' '`
 
   if ! test "$svnrevision" = ""; then
     SAGA_PACKAGE_REVISION=$svnrevision
@@ -2001,7 +2001,6 @@ $as_echo "$SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&6; }
   else
     as_fn_error $? "SAGA tree at $SAGA_LOCATION seems invalid: no $SAGA_CONF found." "$LINENO" 5
   fi
-
 
   # be backward compatible to old versions of saga.m4
   TMP_SAGA_LOCATION=$SAGA_LOCATION
