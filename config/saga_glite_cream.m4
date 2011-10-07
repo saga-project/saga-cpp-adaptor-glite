@@ -83,9 +83,9 @@ AC_DEFUN([AX_SAGA_CHECK_GLITE],
       AC_MSG_CHECKING(for glite in $tmp_path)
     
       test -x $tmp_path/bin/glite && GLITE_BIN_VERSION=$tmp_path/bin/glite
-      test -x $tmp_path/bin/glite       && GLITE_BIN_Q=$tmp_path/bin/glite
-      test -x $tmp_path/bin/glite  && GLITE_BIN_SUBMIT=$tmp_path/bin/glite
-      test -x $tmp_path/bin/glite      && GLITE_BIN_RM=$tmp_path/bin/glite
+      test -x $tmp_path/bin/glite &&       GLITE_BIN_Q=$tmp_path/bin/glite
+      test -x $tmp_path/bin/glite &&  GLITE_BIN_SUBMIT=$tmp_path/bin/glite
+      test -x $tmp_path/bin/glite &&      GLITE_BIN_RM=$tmp_path/bin/glite
 
       if test "x$GLITE_BIN_VERSION" != "x"; then
         GLITE_VERSION=`$GLITE_BIN_VERSION | head -1 | cut -f 2 -d ' '`
@@ -100,6 +100,7 @@ AC_DEFUN([AX_SAGA_CHECK_GLITE],
               GLITE_LOCATION=$tmp_path
               GLITE_PATH=$tmp_path/bin
               GLITE_CONFIG=$tmp_path/etc/glite
+              SAGA_GLITE_DEP_FILES="$GLITE_BIN_VERSION $GLITE_CONFIG"
               break;
             fi
           fi
@@ -130,7 +131,6 @@ AC_DEFUN([AX_SAGA_CHECK_GLITE],
     AC_SUBST(GLITE_BIN_RM)
 
   fi
-
 
   AC_SUBST(SAGA_HAVE_GLITE)
   AC_SUBST(GLITE_LOCATION)
