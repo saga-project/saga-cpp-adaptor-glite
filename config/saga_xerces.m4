@@ -121,7 +121,7 @@ AC_DEFUN([AX_SAGA_CHECK_XERCESC],
 
           AC_MSG_RESULT([yes ($XERCESC_VERSION)])
 
-          SAGA_XERCESC_DEP_FILES="$tmp_path/include/xercesc.h"
+          SAGA_XERCESC_DEP_FILES="$tmp_path/include/xercesc/util/PlatformUtils.hpp"
           break;
         fi
       fi
