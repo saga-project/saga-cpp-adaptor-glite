@@ -607,7 +607,6 @@ SAGA_MAKE_INCLUDE_DIR
 TMP_SAGA_LOCATION
 SAGA_PACKAGE_REVISION
 SAGA_PACKAGE_VERSION
-SAGA_PACKAGE_NAME
 SAGA_CONFIG
 SAGA_INI_DIR
 SAGA_BIN_DIR
@@ -1952,20 +1951,18 @@ $as_echo "$SAGA_VERSION_MAJOR.$SAGA_VERSION_MINOR.$SAGA_VERSION_SUBMINOR" >&6; }
   # local PACKAGE file is present though, for example for an adaptor, we use its
   # version info instead.
 
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga package name" >&5
-$as_echo_n "checking saga package name... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga package name and version" >&5
+$as_echo_n "checking saga package name and version... " >&6; }
   SAGA_PACKAGE_NAME=saga
   test -f PACKAGE && SAGA_PACKAGE_NAME=` grep -e '^PACKAGE:'  PACKAGE | sed -e 's/^PACKAGE: *//'`
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_NAME" >&5
-$as_echo "$SAGA_PACKAGE_NAME" >&6; }
 
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking saga package version" >&5
-$as_echo_n "checking saga package version... " >&6; }
   SAGA_PACKAGE_VERSION=$SAGA_VERSION
   test -f PACKAGE && SAGA_PACKAGE_VERSION=` grep -e '^VERSION:'  PACKAGE | sed -e 's/^VERSION: *//'`
   test -f PACKAGE && SAGA_PACKAGE_REVISION=`grep -e '^REVISION:' PACKAGE | cut -sf 2 -d '$' | cut -sf 2 -d ' '`
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&5
-$as_echo "$SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_NAME($SAGA_PACKAGE_VERSION / r$SAGA_PACKAGE_REVISION)" >&5
+$as_echo "$SAGA_PACKAGE_NAME($SAGA_PACKAGE_VERSION / r$SAGA_PACKAGE_REVISION)" >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SAGA_PACKAGE_VERSION ()" >&5
+$as_echo "$SAGA_PACKAGE_VERSION ()" >&6; }
 
   # svn info supercedes the revision info from the PACKAGE file
   svnrevision=`svn info 2>&1 | grep Revision | cut -sf 2 -d ' '`
@@ -1997,10 +1994,8 @@ $as_echo "$SAGA_PACKAGE_VERSION (r$SAGA_PACKAGE_REVISION)" >&6; }
   export SAGA_INI_DIR
   export SAGA_CONFIG
   export SAGA_VERSION
-  export SAGA_PACKAGE_NAME
   export SAGA_PACKAGE_VERSION
   export SAGA_PACKAGE_REVISION
-
 
 
 
