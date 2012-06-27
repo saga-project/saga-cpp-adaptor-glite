@@ -1,0 +1,5 @@
+
+  - context    'glite' -> 'x509'
+  - prov vars: _name   -> name_
+  - really need to run antlr parser?  Isn't the result static?
+
